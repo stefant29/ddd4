@@ -1,0 +1,137 @@
+
+application {
+  config {
+    baseName dddSoft
+    applicationType monolith
+    packageName com.dignitas.ddd
+    authenticationType jwt
+    prodDatabaseType mysql
+    clientFramework angularX
+  }
+  entities *
+}
+
+
+enum Functie {
+	SUPERADMIN, ADMIN, OPERATOR
+}
+
+enum Procedura {
+	DEZINSECTIE, DEZINFECTIE, DERATIZARE
+}
+
+entity Companie {
+	ID String
+    NUME String
+}
+
+/* SUPER-ADMIN (dezvoltatori), ADMIN (seful companiei), OPERATOR*/
+entity User {
+	id String
+    
+    nume String required
+    prenume String required
+    functie Functie required
+}
+
+entity CategorieClient {
+	id String
+    nume String /* Agent economic, Restaurant, Asociatie de proprietari, Persoana fizica" */
+}
+
+entity Client {
+	id String
+    
+    denumire String required
+    codFiscal String required
+    numarRegistruComert String
+    adresaPunctLucru String required	/* !!!! POT FI MAI MULTE ADRESE !!! */
+    telefon String required
+    email String
+    persoanaContact String required
+    contract String
+    
+    deratizare Boolean
+    dezinsectie Boolean
+    dezinfectie Boolean
+    
+    frecventaDeratizare Integer
+    frecventaDezinsectie Integer
+    frecventaDezinfectie Integer
+}
+
+entity Material {
+	id String
+    procedura Procedura
+    
+    factura String required
+    denumire String required
+    lot String required
+    dataAchizitionare LocalDate
+    dataExpirare LocalDate
+    dilutie String
+    timpContact Integer
+    metodaAplicare String
+    gramaj Integer
+    cantitate Integer
+}
+
+
+entity ProcesVerbal {
+	id String
+    
+    data LocalDate required
+    ora Instant
+    numarProcesVerbal Integer required
+    reprezentant String
+    spatii String
+    suprafata Integer
+    rapelDezinsectie Integer
+    rapelDeratizare Integer
+    garantieDezinsectie Boolean
+    garantieDeratizare Boolean
+}
+
+entity JTMaterialProcesVerbal {
+	id String
+    
+    procedura Procedura
+    cantitate Integer
+}
+
+relationship OneToMany {
+  Companie to User
+  Companie to Client
+  Companie to Material
+  Companie to ProcesVerbal
+  
+  CategorieClient to Client
+  
+  Client to ProcesVerbal
+  User to ProcesVerbal
+
+  Material to JTMaterialProcesVerbal
+  ProcesVerbal to JTMaterialProcesVerbal
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
