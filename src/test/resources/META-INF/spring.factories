@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory = com.softdignitas.\
+    ddd.config.SqlTestContainersSpringContextCustomizerFactory

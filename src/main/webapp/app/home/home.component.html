@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-3">
+    <span class="hipster img-fluid rounded"></span>
+  </div>
+
+  <div class="col-md-9">
+    <h1 class="display-4"><span>Bun venit, Java Hipster!</span> (Ddd 4)</h1>
+
+    <p class="lead">Aceasta este pagina ta de start</p>
+
+    <div>
+      @if (account !== null) {
+        <div class="alert alert-success">
+          @if (account) {
+            <span id="home-logged-message">Ești autentificat cu numele de utilizator &quot;{{ account.login }}&quot;.</span>
+          }
+        </div>
+      } @else {
+        <div class="alert alert-warning">
+          <span>Dacă doriți să vă </span>
+          <a class="alert-link" (click)="login()">autentificați</a
+          ><span
+            >, puteți încerca conturile implicite:<br />- Administrator (login=&quot;admin&quot; și parola=&quot;admin&quot;) <br />-
+            Utilizator (login=&quot;user&quot; și parola=&quot;user&quot;).</span
+          >
+        </div>
+
+        <div class="alert alert-warning">
+          <span>Încă nu aveți un cont?</span>&nbsp;
+          <a class="alert-link" routerLink="/account/register">Înregistrați un cont nou</a>
+        </div>
+      }
+    </div>
+
+    <p>Dacă ai orice întrebări în legatură cu JHipster:</p>
+
+    <ul>
+      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">Pagina JHipster</a></li>
+      <li>
+        <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster pe Stack Overflow</a>
+      </li>
+      <li>
+        <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer"
+          >JHipster bug tracker</a
+        >
+      </li>
+      <li>
+        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer"
+          >Camera de chat publică pentru JHipster</a
+        >
+      </li>
+      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">Contactează &#64;jhipster pe Twitter</a></li>
+    </ul>
+
+    <p>
+      <span>Dacă iți place JHipster nu uita să ne dai o stea pe</span>
+      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
+    </p>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h1 data-cy="registerTitle">Înregistrare</h1>
+
+      @if (success) {
+        <div class="alert alert-success"><strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați emailul pentru confirmare.</div>
+      }
+
+      @if (error) {
+        <div class="alert alert-danger"><strong>Inregistrare eșuată!</strong> Vă rugăm să încercați mai tarziu.</div>
+      }
+
+      @if (errorUserExists) {
+        <div class="alert alert-danger">
+          <strong>Acest nume de utilizator este deja folosit de altcineva!</strong> Vă rugăm să alegeți altul.
+        </div>
+      }
+
+      @if (errorEmailExists) {
+        <div class="alert alert-danger"><strong>Acest email a mai fost folosit!</strong> Vă rugăm să alegeți altul.</div>
+      }
+
+      @if (doNotMatch) {
+        <div class="alert alert-danger">Parola și confirmarea ei nu corespund!</div>
+      }
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      @if (!success) {
+        <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
+          <div class="mb-3">
+            <label class="form-label" for="login">Utilizator</label>
+            <input
+              type="text"
+              class="form-control"
+              id="login"
+              name="login"
+              placeholder="Numele de utilizator"
+              formControlName="login"
+              data-cy="username"
+              #login
+            />
+
+            @if (registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)) {
+              <div>
+                @if (registerForm.get('login')?.errors?.required) {
+                  <small class="form-text text-danger">Numele de utilizator este necesar.</small>
+                }
+
+                @if (registerForm.get('login')?.errors?.minlength) {
+                  <small class="form-text text-danger">Numele de utilizator nu poate fi mai scurt de 1 caracter.</small>
+                }
+
+                @if (registerForm.get('login')?.errors?.maxlength) {
+                  <small class="form-text text-danger">Numele de utilizator nu poate fi mai lung de 50 caractere.</small>
+                }
+
+                @if (registerForm.get('login')?.errors?.pattern) {
+                  <small class="form-text text-danger">Your username is invalid.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="Emailul dumneavoastră"
+              formControlName="email"
+              data-cy="email"
+            />
+
+            @if (registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)) {
+              <div>
+                @if (registerForm.get('email')?.errors?.required) {
+                  <small class="form-text text-danger">Emailul dumneavoastră este necesar.</small>
+                }
+
+                @if (registerForm.get('email')?.errors?.invalid) {
+                  <small class="form-text text-danger">Email invalid.</small>
+                }
+
+                @if (registerForm.get('email')?.errors?.minlength) {
+                  <small class="form-text text-danger">Emailul dumneavoastră trebuie să aibă cel puțin 5 caractere</small>
+                }
+
+                @if (registerForm.get('email')?.errors?.maxlength) {
+                  <small class="form-text text-danger">Emailul dumneavoastră nu poate avea mai mult de 50 de caractere.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="password">Parolă nouă</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Parolă nouă"
+              formControlName="password"
+              data-cy="firstPassword"
+            />
+
+            @if (registerForm.get('password')!.invalid && (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)) {
+              <div>
+                @if (registerForm.get('password')?.errors?.required) {
+                  <small class="form-text text-danger">Parola dumneavoastră este necesară.</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.minlength) {
+                  <small class="form-text text-danger">Parola dumneavoastră trebuie să aibă cel puțin 4 caractere.</small>
+                }
+
+                @if (registerForm.get('password')?.errors?.maxlength) {
+                  <small class="form-text text-danger">Parola dumneavoastră poate avea maxim 50 de caractere.</small>
+                }
+              </div>
+            }
+
+            <jhi-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></jhi-password-strength-bar>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="confirmPassword">Confirma parolă</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirmați noua parolă"
+              formControlName="confirmPassword"
+              data-cy="secondPassword"
+            />
+
+            @if (
+              registerForm.get('confirmPassword')!.invalid &&
+              (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)
+            ) {
+              <div>
+                @if (registerForm.get('confirmPassword')?.errors?.required) {
+                  <small class="form-text text-danger">Confirmarea parolei este necesară.</small>
+                }
+
+                @if (registerForm.get('confirmPassword')?.errors?.minlength) {
+                  <small class="form-text text-danger">Confirmarea parolei trebuie să aibă cel puțin 4 caractere.</small>
+                }
+
+                @if (registerForm.get('confirmPassword')?.errors?.maxlength) {
+                  <small class="form-text text-danger">Confirmarea parolei poate avea maxim 50 de caractere.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary" data-cy="submit">Înregistrare</button>
+        </form>
+      }
+
+      <div class="mt-3 alert alert-warning">
+        <span>Dacă doriți să vă </span>
+        <a class="alert-link" routerLink="/login">autentificați</a
+        ><span
+          >, puteți încerca conturile implicite:<br />- Administrator (login=&quot;admin&quot; și parola=&quot;admin&quot;) <br />-
+          Utilizator (login=&quot;user&quot; și parola=&quot;user&quot;).</span
+        >
+      </div>
+    </div>
+  </div>
+</div>
