@@ -1,0 +1,28 @@
+{
+  "annotations": {
+    "changelogDate": "20240205135850"
+  },
+  "applications": "*",
+  "entityTableName": "categorie_client",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nume",
+      "fieldType": "String"
+    }
+  ],
+  "name": "CategorieClient",
+  "relationships": [
+    {
+      "otherEntityName": "client",
+      "otherEntityRelationshipName": "categorie",
+      "relationshipName": "client",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

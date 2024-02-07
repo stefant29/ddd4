@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (utilizator) {
+      <div>
+        <h2 data-cy="utilizatorDetailsHeading"><span>Utilizator</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ utilizator.id }}</span>
+          </dd>
+          <dt><span>Nume</span></dt>
+          <dd>
+            <span>{{ utilizator.nume }}</span>
+          </dd>
+          <dt><span>Prenume</span></dt>
+          <dd>
+            <span>{{ utilizator.prenume }}</span>
+          </dd>
+          <dt><span>Functie</span></dt>
+          <dd>
+            <span>{{ utilizator.functie }}</span>
+          </dd>
+          <dt><span>Companie</span></dt>
+          <dd>
+            @if (utilizator.companie) {
+              <div>
+                <a [routerLink]="['/companie', utilizator.companie.id, 'view']">{{ utilizator.companie.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
+        </button>
+
+        <button type="button" [routerLink]="['/utilizator', utilizator.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

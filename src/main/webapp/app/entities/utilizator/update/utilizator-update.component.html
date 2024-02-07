@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-utilizator-heading" data-cy="UtilizatorCreateUpdateHeading">Creeare sau editare Utilizator</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nume">Nume</label>
+          <input type="text" class="form-control" name="nume" id="field_nume" data-cy="nume" formControlName="nume" />
+          @if (editForm.get('nume')!.invalid && (editForm.get('nume')!.dirty || editForm.get('nume')!.touched)) {
+            <div>
+              @if (editForm.get('nume')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_prenume">Prenume</label>
+          <input type="text" class="form-control" name="prenume" id="field_prenume" data-cy="prenume" formControlName="prenume" />
+          @if (editForm.get('prenume')!.invalid && (editForm.get('prenume')!.dirty || editForm.get('prenume')!.touched)) {
+            <div>
+              @if (editForm.get('prenume')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_functie">Functie</label>
+          <select class="form-control" name="functie" formControlName="functie" id="field_functie" data-cy="functie">
+            <option [ngValue]="null"></option>
+            @for (functie of functieValues; track $index) {
+              <option [value]="functie">{{ functie }}</option>
+            }
+          </select>
+          @if (editForm.get('functie')!.invalid && (editForm.get('functie')!.dirty || editForm.get('functie')!.touched)) {
+            <div>
+              @if (editForm.get('functie')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_companie">Companie</label>
+          <select
+            class="form-control"
+            id="field_companie"
+            data-cy="companie"
+            name="companie"
+            formControlName="companie"
+            [compareWith]="compareCompanie"
+          >
+            @if (editForm.get(['companie'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (companieOption of companiesSharedCollection; track $index) {
+              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
+          <div>
+            @if (editForm.get(['companie'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

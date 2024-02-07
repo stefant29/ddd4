@@ -1,0 +1,99 @@
+{
+  "annotations": {
+    "changelogDate": "20240205135950"
+  },
+  "applications": "*",
+  "entityTableName": "client",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "denumire",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "codFiscal",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numarRegistruComert",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "adresaPunctLucru",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "telefon",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "persoanaContact",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contract",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "deratizare",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dezinsectie",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dezinfectie",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "frecventaDeratizare",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "frecventaDezinsectie",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "frecventaDezinfectie",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "Client",
+  "relationships": [
+    {
+      "otherEntityName": "procesVerbal",
+      "otherEntityRelationshipName": "client",
+      "relationshipName": "proceseVerbale",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "companie",
+      "otherEntityRelationshipName": "clienti",
+      "relationshipName": "companie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "categorieClient",
+      "relationshipName": "categorie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

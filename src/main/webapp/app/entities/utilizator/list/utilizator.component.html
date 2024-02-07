@@ -1,0 +1,115 @@
+<div>
+  <h2 id="page-heading" data-cy="UtilizatorHeading">
+    <span>Utilizators</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-utilizator"
+        [routerLink]="['/utilizator/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Creeare o nouă entitate Utilizator</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (utilizators?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Utilizators found</span>
+    </div>
+  }
+
+  @if (utilizators && utilizators.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nume">
+              <div class="d-flex">
+                <span>Nume</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="prenume">
+              <div class="d-flex">
+                <span>Prenume</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="functie">
+              <div class="d-flex">
+                <span>Functie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="companie.id">
+              <div class="d-flex">
+                <span>Companie</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (utilizator of utilizators; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/utilizator', utilizator.id, 'view']">{{ utilizator.id }}</a>
+              </td>
+              <td>{{ utilizator.nume }}</td>
+              <td>{{ utilizator.prenume }}</td>
+              <td>{{ utilizator.functie }}</td>
+              <td>
+                @if (utilizator.companie) {
+                  <div>
+                    <a [routerLink]="['/companie', utilizator.companie.id, 'view']">{{ utilizator.companie.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/utilizator', utilizator.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Vizualizare</span>
+                  </a>
+
+                  <a [routerLink]="['/utilizator', utilizator.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Editare</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(utilizator)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Ștergere</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

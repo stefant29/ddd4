@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (client) {
+      <div>
+        <h2 data-cy="clientDetailsHeading"><span>Client</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ client.id }}</span>
+          </dd>
+          <dt><span>Denumire</span></dt>
+          <dd>
+            <span>{{ client.denumire }}</span>
+          </dd>
+          <dt><span>Cod Fiscal</span></dt>
+          <dd>
+            <span>{{ client.codFiscal }}</span>
+          </dd>
+          <dt><span>Numar Registru Comert</span></dt>
+          <dd>
+            <span>{{ client.numarRegistruComert }}</span>
+          </dd>
+          <dt><span>Adresa Punct Lucru</span></dt>
+          <dd>
+            <span>{{ client.adresaPunctLucru }}</span>
+          </dd>
+          <dt><span>Telefon</span></dt>
+          <dd>
+            <span>{{ client.telefon }}</span>
+          </dd>
+          <dt><span>Email</span></dt>
+          <dd>
+            <span>{{ client.email }}</span>
+          </dd>
+          <dt><span>Persoana Contact</span></dt>
+          <dd>
+            <span>{{ client.persoanaContact }}</span>
+          </dd>
+          <dt><span>Contract</span></dt>
+          <dd>
+            <span>{{ client.contract }}</span>
+          </dd>
+          <dt><span>Deratizare</span></dt>
+          <dd>
+            <span>{{ client.deratizare }}</span>
+          </dd>
+          <dt><span>Dezinsectie</span></dt>
+          <dd>
+            <span>{{ client.dezinsectie }}</span>
+          </dd>
+          <dt><span>Dezinfectie</span></dt>
+          <dd>
+            <span>{{ client.dezinfectie }}</span>
+          </dd>
+          <dt><span>Frecventa Deratizare</span></dt>
+          <dd>
+            <span>{{ client.frecventaDeratizare }}</span>
+          </dd>
+          <dt><span>Frecventa Dezinsectie</span></dt>
+          <dd>
+            <span>{{ client.frecventaDezinsectie }}</span>
+          </dd>
+          <dt><span>Frecventa Dezinfectie</span></dt>
+          <dd>
+            <span>{{ client.frecventaDezinfectie }}</span>
+          </dd>
+          <dt><span>Companie</span></dt>
+          <dd>
+            @if (client.companie) {
+              <div>
+                <a [routerLink]="['/companie', client.companie.id, 'view']">{{ client.companie.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Categorie</span></dt>
+          <dd>
+            @if (client.categorie) {
+              <div>
+                <a [routerLink]="['/categorie-client', client.categorie.id, 'view']">{{ client.categorie.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
+        </button>
+
+        <button type="button" [routerLink]="['/client', client.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
