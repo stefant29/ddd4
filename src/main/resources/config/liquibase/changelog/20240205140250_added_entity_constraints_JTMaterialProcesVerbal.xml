@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity JTMaterialProcesVerbal.
+    -->
+    <changeSet id="20240205140250-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="produs_id"
+                                 baseTableName="jt_material_proces_verbal"
+                                 constraintName="fk_jt_material_proces_verbal__produs_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="material"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="proces_verbal_id"
+                                 baseTableName="jt_material_proces_verbal"
+                                 constraintName="fk_jt_material_proces_verbal__proces_verbal_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="proces_verbal"
+                                 />
+    </changeSet>
+</databaseChangeLog>

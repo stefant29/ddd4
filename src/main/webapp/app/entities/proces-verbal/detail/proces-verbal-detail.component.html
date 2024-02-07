@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (procesVerbal) {
+      <div>
+        <h2 data-cy="procesVerbalDetailsHeading"><span>Proces Verbal</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ procesVerbal.id }}</span>
+          </dd>
+          <dt><span>Data</span></dt>
+          <dd>
+            <span>{{ procesVerbal.data | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Ora</span></dt>
+          <dd>
+            <span>{{ procesVerbal.ora | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span>Numar Proces Verbal</span></dt>
+          <dd>
+            <span>{{ procesVerbal.numarProcesVerbal }}</span>
+          </dd>
+          <dt><span>Reprezentant</span></dt>
+          <dd>
+            <span>{{ procesVerbal.reprezentant }}</span>
+          </dd>
+          <dt><span>Spatii</span></dt>
+          <dd>
+            <span>{{ procesVerbal.spatii }}</span>
+          </dd>
+          <dt><span>Suprafata</span></dt>
+          <dd>
+            <span>{{ procesVerbal.suprafata }}</span>
+          </dd>
+          <dt><span>Rapel Dezinsectie</span></dt>
+          <dd>
+            <span>{{ procesVerbal.rapelDezinsectie }}</span>
+          </dd>
+          <dt><span>Rapel Deratizare</span></dt>
+          <dd>
+            <span>{{ procesVerbal.rapelDeratizare }}</span>
+          </dd>
+          <dt><span>Garantie Dezinsectie</span></dt>
+          <dd>
+            <span>{{ procesVerbal.garantieDezinsectie }}</span>
+          </dd>
+          <dt><span>Garantie Deratizare</span></dt>
+          <dd>
+            <span>{{ procesVerbal.garantieDeratizare }}</span>
+          </dd>
+          <dt><span>Companie</span></dt>
+          <dd>
+            @if (procesVerbal.companie) {
+              <div>
+                <a [routerLink]="['/companie', procesVerbal.companie.id, 'view']">{{ procesVerbal.companie.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Client</span></dt>
+          <dd>
+            @if (procesVerbal.client) {
+              <div>
+                <a [routerLink]="['/client', procesVerbal.client.id, 'view']">{{ procesVerbal.client.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Operator</span></dt>
+          <dd>
+            @if (procesVerbal.operator) {
+              <div>
+                <a [routerLink]="['/utilizator', procesVerbal.operator.id, 'view']">{{ procesVerbal.operator.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
+        </button>
+
+        <button type="button" [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

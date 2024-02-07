@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (jTMaterialProcesVerbal) {
+      <div>
+        <h2 data-cy="jTMaterialProcesVerbalDetailsHeading"><span>JT Material Proces Verbal</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ jTMaterialProcesVerbal.id }}</span>
+          </dd>
+          <dt><span>Procedura</span></dt>
+          <dd>
+            <span>{{ jTMaterialProcesVerbal.procedura }}</span>
+          </dd>
+          <dt><span>Cantitate</span></dt>
+          <dd>
+            <span>{{ jTMaterialProcesVerbal.cantitate }}</span>
+          </dd>
+          <dt><span>Produs</span></dt>
+          <dd>
+            @if (jTMaterialProcesVerbal.produs) {
+              <div>
+                <a [routerLink]="['/material', jTMaterialProcesVerbal.produs.id, 'view']">{{ jTMaterialProcesVerbal.produs.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Proces Verbal</span></dt>
+          <dd>
+            @if (jTMaterialProcesVerbal.procesVerbal) {
+              <div>
+                <a [routerLink]="['/proces-verbal', jTMaterialProcesVerbal.procesVerbal.id, 'view']">{{
+                  jTMaterialProcesVerbal.procesVerbal.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
+        </button>
+
+        <button type="button" [routerLink]="['/jt-material-proces-verbal', jTMaterialProcesVerbal.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

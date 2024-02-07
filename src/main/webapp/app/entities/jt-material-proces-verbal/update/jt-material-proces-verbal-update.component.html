@@ -1,0 +1,105 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-jt-material-proces-verbal-heading" data-cy="JTMaterialProcesVerbalCreateUpdateHeading">
+        Creeare sau editare JT Material Proces Verbal
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_procedura">Procedura</label>
+          <select class="form-control" name="procedura" formControlName="procedura" id="field_procedura" data-cy="procedura">
+            <option [ngValue]="null"></option>
+            @for (procedura of proceduraValues; track $index) {
+              <option [value]="procedura">{{ procedura }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cantitate">Cantitate</label>
+          <input type="number" class="form-control" name="cantitate" id="field_cantitate" data-cy="cantitate" formControlName="cantitate" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_produs">Produs</label>
+          <select
+            class="form-control"
+            id="field_produs"
+            data-cy="produs"
+            name="produs"
+            formControlName="produs"
+            [compareWith]="compareMaterial"
+          >
+            @if (editForm.get(['produs'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (materialOption of materialsSharedCollection; track $index) {
+              <option [ngValue]="materialOption">{{ materialOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['produs'])!.invalid && (editForm.get(['produs'])!.dirty || editForm.get(['produs'])!.touched)) {
+          <div>
+            @if (editForm.get(['produs'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_procesVerbal">Proces Verbal</label>
+          <select
+            class="form-control"
+            id="field_procesVerbal"
+            data-cy="procesVerbal"
+            name="procesVerbal"
+            formControlName="procesVerbal"
+            [compareWith]="compareProcesVerbal"
+          >
+            @if (editForm.get(['procesVerbal'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (procesVerbalOption of procesVerbalsSharedCollection; track $index) {
+              <option [ngValue]="procesVerbalOption">{{ procesVerbalOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['procesVerbal'])!.invalid && (editForm.get(['procesVerbal'])!.dirty || editForm.get(['procesVerbal'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['procesVerbal'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
