@@ -1,0 +1,105 @@
+
+
+enum Functie {
+    SUPERADMIN, ADMIN, OPERATOR
+}
+
+enum Procedura {
+    DEZINSECTIE, DEZINFECTIE, DERATIZARE
+}
+
+entity Companie {
+    ID String
+    NUME String
+}
+
+/* SUPER-ADMIN (dezvoltatori), ADMIN (seful companiei), OPERATOR*/
+entity Utilizator {
+    id String
+
+    nume String required
+    prenume String required
+    functie Functie required
+}
+
+entity CategorieClient {
+    id String
+    nume String /* Agent economic, Restaurant, Asociatie de proprietari, Persoana fizica" */
+}
+
+entity Client {
+    id String
+
+    denumire String required
+    codFiscal String required
+    numarRegistruComert String
+    adresaPunctLucru String required	/* !!!! POT FI MAI MULTE ADRESE !!! */
+    telefon String required
+    email String
+    persoanaContact String required
+    contract String
+
+    deratizare Boolean
+    dezinsectie Boolean
+    dezinfectie Boolean
+
+    frecventaDeratizare Integer
+    frecventaDezinsectie Integer
+    frecventaDezinfectie Integer
+}
+
+entity Material {
+    id String
+    procedura Procedura
+
+    factura String required
+    denumire String required
+    lot String required
+    dataAchizitionare LocalDate
+    dataExpirare LocalDate
+    dilutie String
+    timpContact Integer
+    metodaAplicare String
+    gramaj Integer
+    cantitate Integer
+}
+
+
+entity ProcesVerbal {
+    id String
+
+    data LocalDate required
+    ora Instant
+    numarProcesVerbal Integer required
+    reprezentant String
+    spatii String
+    suprafata Integer
+    rapelDezinsectie Integer
+    rapelDeratizare Integer
+    garantieDezinsectie Boolean
+    garantieDeratizare Boolean
+}
+
+entity JTMaterialProcesVerbal {
+    id String
+
+    procedura Procedura
+    cantitate Integer
+}
+
+relationship OneToMany {
+    Companie{utilizatori} to Utilizator{companie required}
+    Companie{clienti} to Client{companie required}
+    Companie{materiale} to Material{companie required}
+    Companie{proceseVerbale} to ProcesVerbal{companie required}
+
+    CategorieClient to Client{categorie}
+
+    Client{proceseVerbale} to ProcesVerbal{client required}
+    Utilizator{proceseVerbale} to ProcesVerbal{operator required}
+
+    /* Many-to-many - Material -> ProcesVerbal */
+    Material to JTMaterialProcesVerbal{produs required}
+    ProcesVerbal to JTMaterialProcesVerbal{procesVerbal required}
+
+}
