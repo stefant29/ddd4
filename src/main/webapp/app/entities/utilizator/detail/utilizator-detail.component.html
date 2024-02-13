@@ -2,7 +2,9 @@
   <div class="col-8">
     @if (utilizator) {
       <div>
-        <h2 data-cy="utilizatorDetailsHeading"><span>Utilizator</span></h2>
+        <h2 data-cy="utilizatorDetailsHeading">
+          <span>{{ utilizator.nume }} {{ utilizator.prenume }}</span>
+        </h2>
 
         <hr />
 
@@ -11,10 +13,6 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Id</span></dt>
-          <dd>
-            <span>{{ utilizator.id }}</span>
-          </dd>
           <dt><span>Nume</span></dt>
           <dd>
             <span>{{ utilizator.nume }}</span>
@@ -26,18 +24,6 @@
           <dt><span>Functie</span></dt>
           <dd>
             <span>{{ utilizator.functie }}</span>
-          </dd>
-          <dt><span>User</span></dt>
-          <dd>
-            <span>{{ utilizator.user?.id }}</span>
-          </dd>
-          <dt><span>Companie</span></dt>
-          <dd>
-            @if (utilizator.companie) {
-              <div>
-                <a [routerLink]="['/companie', utilizator.companie.id, 'view']">{{ utilizator.companie.id }}</a>
-              </div>
-            }
           </dd>
         </dl>
 
