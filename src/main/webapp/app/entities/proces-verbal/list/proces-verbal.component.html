@@ -1,0 +1,197 @@
+<div>
+  <h2 id="page-heading" data-cy="ProcesVerbalHeading">
+    <span>Proces Verbals</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-proces-verbal"
+        [routerLink]="['/proces-verbal/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Creeare o nouă entitate Proces Verbal</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (procesVerbals?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Proces Verbals found</span>
+    </div>
+  }
+
+  @if (procesVerbals && procesVerbals.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="data">
+              <div class="d-flex">
+                <span>Data</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ora">
+              <div class="d-flex">
+                <span>Ora</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numarProcesVerbal">
+              <div class="d-flex">
+                <span>Numar Proces Verbal</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="reprezentant">
+              <div class="d-flex">
+                <span>Reprezentant</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="spatii">
+              <div class="d-flex">
+                <span>Spatii</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="suprafata">
+              <div class="d-flex">
+                <span>Suprafata</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rapelDezinsectie">
+              <div class="d-flex">
+                <span>Rapel Dezinsectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rapelDeratizare">
+              <div class="d-flex">
+                <span>Rapel Deratizare</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="garantieDezinsectie">
+              <div class="d-flex">
+                <span>Garantie Dezinsectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="garantieDeratizare">
+              <div class="d-flex">
+                <span>Garantie Deratizare</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="companie.id">
+              <div class="d-flex">
+                <span>Companie</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="client.id">
+              <div class="d-flex">
+                <span>Client</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="operator.id">
+              <div class="d-flex">
+                <span>Operator</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (procesVerbal of procesVerbals; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/proces-verbal', procesVerbal.id, 'view']">{{ procesVerbal.id }}</a>
+              </td>
+              <td>{{ procesVerbal.data | formatMediumDate }}</td>
+              <td>{{ procesVerbal.ora | formatMediumDatetime }}</td>
+              <td>{{ procesVerbal.numarProcesVerbal }}</td>
+              <td>{{ procesVerbal.reprezentant }}</td>
+              <td>{{ procesVerbal.spatii }}</td>
+              <td>{{ procesVerbal.suprafata }}</td>
+              <td>{{ procesVerbal.rapelDezinsectie }}</td>
+              <td>{{ procesVerbal.rapelDeratizare }}</td>
+              <td>{{ procesVerbal.garantieDezinsectie }}</td>
+              <td>{{ procesVerbal.garantieDeratizare }}</td>
+              <td>
+                @if (procesVerbal.companie) {
+                  <div>
+                    <a [routerLink]="['/companie', procesVerbal.companie.id, 'view']">{{ procesVerbal.companie.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (procesVerbal.client) {
+                  <div>
+                    <a [routerLink]="['/client', procesVerbal.client.id, 'view']">{{ procesVerbal.client.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (procesVerbal.operator) {
+                  <div>
+                    <a [routerLink]="['/utilizator', procesVerbal.operator.id, 'view']">{{ procesVerbal.operator.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/proces-verbal', procesVerbal.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Vizualizare</span>
+                  </a>
+
+                  <a [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Editare</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(procesVerbal)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Ștergere</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

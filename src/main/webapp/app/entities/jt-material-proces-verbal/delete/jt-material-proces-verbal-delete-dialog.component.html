@@ -1,0 +1,26 @@
+@if (jTMaterialProcesVerbal) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(jTMaterialProcesVerbal.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="jTMaterialProcesVerbalDeleteDialogHeading">Confirmați operația de ștergere</h4>
+
+      <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error></jhi-alert-error>
+      <p id="jhi-delete-jTMaterialProcesVerbal-heading">
+        Sunteți sigur că doriți să ștergeți JT Material Proces Verbal {{ jTMaterialProcesVerbal.id }}?
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+      </button>
+
+      <button id="jhi-confirm-delete-jTMaterialProcesVerbal" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span>Ștergere</span>
+      </button>
+    </div>
+  </form>
+}
