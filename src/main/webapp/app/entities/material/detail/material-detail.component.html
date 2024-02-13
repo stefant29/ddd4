@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (material) {
+      <div>
+        <h2 data-cy="materialDetailsHeading"><span>Material</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Id</span></dt>
+          <dd>
+            <span>{{ material.id }}</span>
+          </dd>
+          <dt><span>Procedura</span></dt>
+          <dd>
+            <span>{{ material.procedura }}</span>
+          </dd>
+          <dt><span>Factura</span></dt>
+          <dd>
+            <span>{{ material.factura }}</span>
+          </dd>
+          <dt><span>Denumire</span></dt>
+          <dd>
+            <span>{{ material.denumire }}</span>
+          </dd>
+          <dt><span>Lot</span></dt>
+          <dd>
+            <span>{{ material.lot }}</span>
+          </dd>
+          <dt><span>Data Achizitionare</span></dt>
+          <dd>
+            <span>{{ material.dataAchizitionare | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Data Expirare</span></dt>
+          <dd>
+            <span>{{ material.dataExpirare | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Dilutie</span></dt>
+          <dd>
+            <span>{{ material.dilutie }}</span>
+          </dd>
+          <dt><span>Timp Contact</span></dt>
+          <dd>
+            <span>{{ material.timpContact }}</span>
+          </dd>
+          <dt><span>Metoda Aplicare</span></dt>
+          <dd>
+            <span>{{ material.metodaAplicare }}</span>
+          </dd>
+          <dt><span>Gramaj</span></dt>
+          <dd>
+            <span>{{ material.gramaj }}</span>
+          </dd>
+          <dt><span>Cantitate</span></dt>
+          <dd>
+            <span>{{ material.cantitate }}</span>
+          </dd>
+          <dt><span>Companie</span></dt>
+          <dd>
+            @if (material.companie) {
+              <div>
+                <a [routerLink]="['/companie', material.companie.id, 'view']">{{ material.companie.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
+        </button>
+
+        <button type="button" [routerLink]="['/material', material.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

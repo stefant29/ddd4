@@ -1,0 +1,216 @@
+<div>
+  <h2 id="page-heading" data-cy="ClientHeading">
+    <span>Clients</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-client"
+        [routerLink]="['/client/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Creeare o nouă entitate Client</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (clients?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>No Clients found</span>
+    </div>
+  }
+
+  @if (clients && clients.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="denumire">
+              <div class="d-flex">
+                <span>Denumire</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="codFiscal">
+              <div class="d-flex">
+                <span>Cod Fiscal</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numarRegistruComert">
+              <div class="d-flex">
+                <span>Numar Registru Comert</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="adresaPunctLucru">
+              <div class="d-flex">
+                <span>Adresa Punct Lucru</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="telefon">
+              <div class="d-flex">
+                <span>Telefon</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span>Email</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="persoanaContact">
+              <div class="d-flex">
+                <span>Persoana Contact</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contract">
+              <div class="d-flex">
+                <span>Contract</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="deratizare">
+              <div class="d-flex">
+                <span>Deratizare</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dezinsectie">
+              <div class="d-flex">
+                <span>Dezinsectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dezinfectie">
+              <div class="d-flex">
+                <span>Dezinfectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="frecventaDeratizare">
+              <div class="d-flex">
+                <span>Frecventa Deratizare</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="frecventaDezinsectie">
+              <div class="d-flex">
+                <span>Frecventa Dezinsectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="frecventaDezinfectie">
+              <div class="d-flex">
+                <span>Frecventa Dezinfectie</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="companie.id">
+              <div class="d-flex">
+                <span>Companie</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="categorie.id">
+              <div class="d-flex">
+                <span>Categorie</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (client of clients; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/client', client.id, 'view']">{{ client.id }}</a>
+              </td>
+              <td>{{ client.denumire }}</td>
+              <td>{{ client.codFiscal }}</td>
+              <td>{{ client.numarRegistruComert }}</td>
+              <td>{{ client.adresaPunctLucru }}</td>
+              <td>{{ client.telefon }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.persoanaContact }}</td>
+              <td>{{ client.contract }}</td>
+              <td>{{ client.deratizare }}</td>
+              <td>{{ client.dezinsectie }}</td>
+              <td>{{ client.dezinfectie }}</td>
+              <td>{{ client.frecventaDeratizare }}</td>
+              <td>{{ client.frecventaDezinsectie }}</td>
+              <td>{{ client.frecventaDezinfectie }}</td>
+              <td>
+                @if (client.companie) {
+                  <div>
+                    <a [routerLink]="['/companie', client.companie.id, 'view']">{{ client.companie.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (client.categorie) {
+                  <div>
+                    <a [routerLink]="['/categorie-client', client.categorie.id, 'view']">{{ client.categorie.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/client', client.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Vizualizare</span>
+                  </a>
+
+                  <a [routerLink]="['/client', client.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Editare</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(client)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Ștergere</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

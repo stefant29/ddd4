@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20240205135650"
+  },
+  "applications": "*",
+  "entityTableName": "companie",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nume",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Companie",
+  "relationships": [
+    {
+      "otherEntityName": "utilizator",
+      "otherEntityRelationshipName": "companie",
+      "relationshipName": "utilizatori",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "client",
+      "otherEntityRelationshipName": "companie",
+      "relationshipName": "clienti",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "material",
+      "otherEntityRelationshipName": "companie",
+      "relationshipName": "materiale",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "procesVerbal",
+      "otherEntityRelationshipName": "companie",
+      "relationshipName": "proceseVerbale",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

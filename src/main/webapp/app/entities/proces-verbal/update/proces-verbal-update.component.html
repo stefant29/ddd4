@@ -1,0 +1,246 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-proces-verbal-heading" data-cy="ProcesVerbalCreateUpdateHeading">Creeare sau editare Proces Verbal</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_data">Data</label>
+          <div class="input-group">
+            <input
+              id="field_data"
+              data-cy="data"
+              type="text"
+              class="form-control"
+              name="data"
+              ngbDatepicker
+              #dataDp="ngbDatepicker"
+              formControlName="data"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          @if (editForm.get('data')!.invalid && (editForm.get('data')!.dirty || editForm.get('data')!.touched)) {
+            <div>
+              @if (editForm.get('data')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ora">Ora</label>
+          <div class="d-flex">
+            <input
+              id="field_ora"
+              data-cy="ora"
+              type="datetime-local"
+              class="form-control"
+              name="ora"
+              formControlName="ora"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numarProcesVerbal">Numar Proces Verbal</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numarProcesVerbal"
+            id="field_numarProcesVerbal"
+            data-cy="numarProcesVerbal"
+            formControlName="numarProcesVerbal"
+          />
+          @if (
+            editForm.get('numarProcesVerbal')!.invalid &&
+            (editForm.get('numarProcesVerbal')!.dirty || editForm.get('numarProcesVerbal')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('numarProcesVerbal')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('numarProcesVerbal')?.errors?.number"
+                >Acest câmp trebuie să fie numeric.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_reprezentant">Reprezentant</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reprezentant"
+            id="field_reprezentant"
+            data-cy="reprezentant"
+            formControlName="reprezentant"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_spatii">Spatii</label>
+          <input type="text" class="form-control" name="spatii" id="field_spatii" data-cy="spatii" formControlName="spatii" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_suprafata">Suprafata</label>
+          <input type="number" class="form-control" name="suprafata" id="field_suprafata" data-cy="suprafata" formControlName="suprafata" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_rapelDezinsectie">Rapel Dezinsectie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="rapelDezinsectie"
+            id="field_rapelDezinsectie"
+            data-cy="rapelDezinsectie"
+            formControlName="rapelDezinsectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_rapelDeratizare">Rapel Deratizare</label>
+          <input
+            type="number"
+            class="form-control"
+            name="rapelDeratizare"
+            id="field_rapelDeratizare"
+            data-cy="rapelDeratizare"
+            formControlName="rapelDeratizare"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_garantieDezinsectie">Garantie Dezinsectie</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="garantieDezinsectie"
+            id="field_garantieDezinsectie"
+            data-cy="garantieDezinsectie"
+            formControlName="garantieDezinsectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_garantieDeratizare">Garantie Deratizare</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="garantieDeratizare"
+            id="field_garantieDeratizare"
+            data-cy="garantieDeratizare"
+            formControlName="garantieDeratizare"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_companie">Companie</label>
+          <select
+            class="form-control"
+            id="field_companie"
+            data-cy="companie"
+            name="companie"
+            formControlName="companie"
+            [compareWith]="compareCompanie"
+          >
+            @if (editForm.get(['companie'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (companieOption of companiesSharedCollection; track $index) {
+              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
+          <div>
+            @if (editForm.get(['companie'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_client">Client</label>
+          <select
+            class="form-control"
+            id="field_client"
+            data-cy="client"
+            name="client"
+            formControlName="client"
+            [compareWith]="compareClient"
+          >
+            @if (editForm.get(['client'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clientOption of clientsSharedCollection; track $index) {
+              <option [ngValue]="clientOption">{{ clientOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['client'])!.invalid && (editForm.get(['client'])!.dirty || editForm.get(['client'])!.touched)) {
+          <div>
+            @if (editForm.get(['client'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_operator">Operator</label>
+          <select
+            class="form-control"
+            id="field_operator"
+            data-cy="operator"
+            name="operator"
+            formControlName="operator"
+            [compareWith]="compareUtilizator"
+          >
+            @if (editForm.get(['operator'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (utilizatorOption of utilizatorsSharedCollection; track $index) {
+              <option [ngValue]="utilizatorOption">{{ utilizatorOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['operator'])!.invalid && (editForm.get(['operator'])!.dirty || editForm.get(['operator'])!.touched)) {
+          <div>
+            @if (editForm.get(['operator'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

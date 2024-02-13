@@ -1,0 +1,7 @@
+export enum Procedura {
+  DEZINSECTIE = 'DEZINSECTIE',
+
+  DEZINFECTIE = 'DEZINFECTIE',
+
+  DERATIZARE = 'DERATIZARE',
+}

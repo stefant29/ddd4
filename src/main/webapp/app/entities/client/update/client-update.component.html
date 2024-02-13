@@ -1,0 +1,250 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-client-heading" data-cy="ClientCreateUpdateHeading">Creeare sau editare Client</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_denumire">Denumire</label>
+          <input type="text" class="form-control" name="denumire" id="field_denumire" data-cy="denumire" formControlName="denumire" />
+          @if (editForm.get('denumire')!.invalid && (editForm.get('denumire')!.dirty || editForm.get('denumire')!.touched)) {
+            <div>
+              @if (editForm.get('denumire')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_codFiscal">Cod Fiscal</label>
+          <input type="text" class="form-control" name="codFiscal" id="field_codFiscal" data-cy="codFiscal" formControlName="codFiscal" />
+          @if (editForm.get('codFiscal')!.invalid && (editForm.get('codFiscal')!.dirty || editForm.get('codFiscal')!.touched)) {
+            <div>
+              @if (editForm.get('codFiscal')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numarRegistruComert">Numar Registru Comert</label>
+          <input
+            type="text"
+            class="form-control"
+            name="numarRegistruComert"
+            id="field_numarRegistruComert"
+            data-cy="numarRegistruComert"
+            formControlName="numarRegistruComert"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_adresaPunctLucru">Adresa Punct Lucru</label>
+          <input
+            type="text"
+            class="form-control"
+            name="adresaPunctLucru"
+            id="field_adresaPunctLucru"
+            data-cy="adresaPunctLucru"
+            formControlName="adresaPunctLucru"
+          />
+          @if (
+            editForm.get('adresaPunctLucru')!.invalid &&
+            (editForm.get('adresaPunctLucru')!.dirty || editForm.get('adresaPunctLucru')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('adresaPunctLucru')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_telefon">Telefon</label>
+          <input type="text" class="form-control" name="telefon" id="field_telefon" data-cy="telefon" formControlName="telefon" />
+          @if (editForm.get('telefon')!.invalid && (editForm.get('telefon')!.dirty || editForm.get('telefon')!.touched)) {
+            <div>
+              @if (editForm.get('telefon')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_persoanaContact">Persoana Contact</label>
+          <input
+            type="text"
+            class="form-control"
+            name="persoanaContact"
+            id="field_persoanaContact"
+            data-cy="persoanaContact"
+            formControlName="persoanaContact"
+          />
+          @if (
+            editForm.get('persoanaContact')!.invalid && (editForm.get('persoanaContact')!.dirty || editForm.get('persoanaContact')!.touched)
+          ) {
+            <div>
+              @if (editForm.get('persoanaContact')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_contract">Contract</label>
+          <input type="text" class="form-control" name="contract" id="field_contract" data-cy="contract" formControlName="contract" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_deratizare">Deratizare</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="deratizare"
+            id="field_deratizare"
+            data-cy="deratizare"
+            formControlName="deratizare"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dezinsectie">Dezinsectie</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="dezinsectie"
+            id="field_dezinsectie"
+            data-cy="dezinsectie"
+            formControlName="dezinsectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dezinfectie">Dezinfectie</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="dezinfectie"
+            id="field_dezinfectie"
+            data-cy="dezinfectie"
+            formControlName="dezinfectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_frecventaDeratizare">Frecventa Deratizare</label>
+          <input
+            type="number"
+            class="form-control"
+            name="frecventaDeratizare"
+            id="field_frecventaDeratizare"
+            data-cy="frecventaDeratizare"
+            formControlName="frecventaDeratizare"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_frecventaDezinsectie">Frecventa Dezinsectie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="frecventaDezinsectie"
+            id="field_frecventaDezinsectie"
+            data-cy="frecventaDezinsectie"
+            formControlName="frecventaDezinsectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_frecventaDezinfectie">Frecventa Dezinfectie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="frecventaDezinfectie"
+            id="field_frecventaDezinfectie"
+            data-cy="frecventaDezinfectie"
+            formControlName="frecventaDezinfectie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_companie">Companie</label>
+          <select
+            class="form-control"
+            id="field_companie"
+            data-cy="companie"
+            name="companie"
+            formControlName="companie"
+            [compareWith]="compareCompanie"
+          >
+            @if (editForm.get(['companie'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (companieOption of companiesSharedCollection; track $index) {
+              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
+          <div>
+            @if (editForm.get(['companie'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_categorie">Categorie</label>
+          <select
+            class="form-control"
+            id="field_categorie"
+            data-cy="categorie"
+            name="categorie"
+            formControlName="categorie"
+            [compareWith]="compareCategorieClient"
+          >
+            <option [ngValue]="null"></option>
+            @for (categorieClientOption of categorieClientsSharedCollection; track $index) {
+              <option [ngValue]="categorieClientOption">{{ categorieClientOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
