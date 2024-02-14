@@ -69,6 +69,7 @@
     "packaging": "jar"
   },
   "dependencies": {
+    "@angular/animations": "^17.0.6",
     "@angular/common": "17.0.6",
     "@angular/compiler": "17.0.6",
     "@angular/core": "17.0.6",
@@ -85,6 +86,8 @@
     "bootstrap": "5.3.2",
     "dayjs": "1.11.10",
     "ngx-infinite-scroll": "17.0.0",
+    "primeicons": "^6.0.1",
+    "primeng": "^17.6.0",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
     "zone.js": "0.14.2"
