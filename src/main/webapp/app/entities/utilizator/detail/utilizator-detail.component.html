@@ -3,6 +3,15 @@
     @if (utilizator) {
       <div>
         <h2 data-cy="utilizatorDetailsHeading">
+          <p-button
+            pRipple
+            [rounded]="true"
+            icon="pi pi-arrow-left"
+            type="submit"
+            (click)="previousState()"
+            severity="secondary"
+          ></p-button>
+
           <span>{{ utilizator.nume }} {{ utilizator.prenume }}</span>
         </h2>
 
@@ -27,13 +36,13 @@
           </dd>
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
-        </button>
-
-        <button type="button" [routerLink]="['/utilizator', utilizator.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
-        </button>
+        <p-button
+          pRipple
+          label="Editare"
+          icon="pi pi-pencil"
+          type="submit"
+          [routerLink]="['/utilizator', utilizator.id, 'edit']"
+        ></p-button>
       </div>
     }
   </div>

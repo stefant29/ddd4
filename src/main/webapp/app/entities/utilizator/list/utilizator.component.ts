@@ -12,6 +12,11 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { IUtilizator } from '../utilizator.model';
 import { EntityArrayResponseType, UtilizatorService } from '../service/utilizator.service';
 import { UtilizatorDeleteDialogComponent } from '../delete/utilizator-delete-dialog.component';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { MessageService, SelectItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   standalone: true,
@@ -26,11 +31,19 @@ import { UtilizatorDeleteDialogComponent } from '../delete/utilizator-delete-dia
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ToastModule,
+    TableModule,
+    ButtonModule,
+    DropdownModule,
   ],
+  providers: [MessageService],
 })
 export class UtilizatorComponent implements OnInit {
   utilizators?: IUtilizator[];
   isLoading = false;
+
+  clonedProducts: { [s: string]: IUtilizator } = {};
+  functii!: SelectItem[];
 
   predicate = 'id';
   ascending = true;
@@ -41,12 +54,19 @@ export class UtilizatorComponent implements OnInit {
     public router: Router,
     protected sortService: SortService,
     protected modalService: NgbModal,
+    private messageService: MessageService,
   ) {}
 
   trackId = (_index: number, item: IUtilizator): string => this.utilizatorService.getUtilizatorIdentifier(item);
 
   ngOnInit(): void {
     this.load();
+
+    this.functii = [
+      { label: 'In Stock', value: 'INSTOCK' },
+      { label: 'Low Stock', value: 'LOWSTOCK' },
+      { label: 'Out of Stock', value: 'OUTOFSTOCK' },
+    ];
   }
 
   delete(utilizator: IUtilizator): void {
@@ -129,5 +149,28 @@ export class UtilizatorComponent implements OnInit {
     } else {
       return [predicate + ',' + ascendingQueryParam];
     }
+  }
+
+  onRowEditInit(utilizator: IUtilizator) {
+    this.clonedProducts[utilizator.id as string] = { ...utilizator };
+  }
+
+  onRowEditSave(utilizator: IUtilizator) {
+    // if (utilizator.price > 0) {
+    //     delete this.clonedProducts[product.id as string];
+    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+    // } else {
+    //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price' });
+    // }
+    console.log('utilizator', utilizator);
+    alert('edit save');
+  }
+
+  onRowEditCancel(utilizator: IUtilizator, index: number) {
+    // this.products[index] = this.clonedProducts[product.id as string];
+    // delete this.clonedProducts[product.id as string];
+
+    console.log('utilizator', utilizator);
+    alert('edit cancel');
   }
 }
