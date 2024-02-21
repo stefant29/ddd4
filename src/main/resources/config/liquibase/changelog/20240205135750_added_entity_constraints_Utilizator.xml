@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity Utilizator.
+    -->
+    <changeSet id="20240205135750-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="utilizator"
+                                 constraintName="fk_utilizator__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="companie_id"
+                                 baseTableName="utilizator"
+                                 constraintName="fk_utilizator__companie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="companie"
+                                 />
+    </changeSet>
+</databaseChangeLog>

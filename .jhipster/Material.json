@@ -1,0 +1,80 @@
+{
+  "annotations": {
+    "changelogDate": "20240205140050"
+  },
+  "applications": "*",
+  "entityTableName": "material",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "procedura",
+      "fieldType": "Procedura",
+      "fieldValues": "DEZINSECTIE,DEZINFECTIE,DERATIZARE"
+    },
+    {
+      "fieldName": "factura",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "denumire",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lot",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataAchizitionare",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dataExpirare",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dilutie",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timpContact",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "metodaAplicare",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "gramaj",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "cantitate",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "Material",
+  "relationships": [
+    {
+      "otherEntityName": "jTMaterialProcesVerbal",
+      "otherEntityRelationshipName": "produs",
+      "relationshipName": "jTMaterialProcesVerbal",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "companie",
+      "otherEntityRelationshipName": "materiale",
+      "relationshipName": "companie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no"
+}

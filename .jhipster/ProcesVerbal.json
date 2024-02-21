@@ -1,0 +1,90 @@
+{
+  "annotations": {
+    "changelogDate": "20240205140150"
+  },
+  "applications": "*",
+  "entityTableName": "proces_verbal",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "data",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ora",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "numarProcesVerbal",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reprezentant",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "spatii",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "suprafata",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "rapelDezinsectie",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "rapelDeratizare",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "garantieDezinsectie",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "garantieDeratizare",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "ProcesVerbal",
+  "relationships": [
+    {
+      "otherEntityName": "jTMaterialProcesVerbal",
+      "otherEntityRelationshipName": "procesVerbal",
+      "relationshipName": "jTMaterialProcesVerbal",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "companie",
+      "otherEntityRelationshipName": "proceseVerbale",
+      "relationshipName": "companie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "client",
+      "otherEntityRelationshipName": "proceseVerbale",
+      "relationshipName": "client",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "utilizator",
+      "otherEntityRelationshipName": "proceseVerbale",
+      "relationshipName": "operator",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no"
+}

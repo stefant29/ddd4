@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20240205140250"
+  },
+  "applications": "*",
+  "entityTableName": "jt_material_proces_verbal",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "procedura",
+      "fieldType": "Procedura",
+      "fieldValues": "DEZINSECTIE,DEZINFECTIE,DERATIZARE"
+    },
+    {
+      "fieldName": "cantitate",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "JTMaterialProcesVerbal",
+  "relationships": [
+    {
+      "otherEntityName": "material",
+      "relationshipName": "produs",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "procesVerbal",
+      "relationshipName": "procesVerbal",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no"
+}

@@ -1,0 +1,183 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-material-heading" data-cy="MaterialCreateUpdateHeading">Creeare sau editare Material</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_procedura">Procedura</label>
+          <select class="form-control" name="procedura" formControlName="procedura" id="field_procedura" data-cy="procedura">
+            <option [ngValue]="null"></option>
+            @for (procedura of proceduraValues; track $index) {
+              <option [value]="procedura">{{ procedura }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_factura">Factura</label>
+          <input type="text" class="form-control" name="factura" id="field_factura" data-cy="factura" formControlName="factura" />
+          @if (editForm.get('factura')!.invalid && (editForm.get('factura')!.dirty || editForm.get('factura')!.touched)) {
+            <div>
+              @if (editForm.get('factura')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_denumire">Denumire</label>
+          <input type="text" class="form-control" name="denumire" id="field_denumire" data-cy="denumire" formControlName="denumire" />
+          @if (editForm.get('denumire')!.invalid && (editForm.get('denumire')!.dirty || editForm.get('denumire')!.touched)) {
+            <div>
+              @if (editForm.get('denumire')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lot">Lot</label>
+          <input type="text" class="form-control" name="lot" id="field_lot" data-cy="lot" formControlName="lot" />
+          @if (editForm.get('lot')!.invalid && (editForm.get('lot')!.dirty || editForm.get('lot')!.touched)) {
+            <div>
+              @if (editForm.get('lot')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dataAchizitionare">Data Achizitionare</label>
+          <div class="input-group">
+            <input
+              id="field_dataAchizitionare"
+              data-cy="dataAchizitionare"
+              type="text"
+              class="form-control"
+              name="dataAchizitionare"
+              ngbDatepicker
+              #dataAchizitionareDp="ngbDatepicker"
+              formControlName="dataAchizitionare"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataAchizitionareDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dataExpirare">Data Expirare</label>
+          <div class="input-group">
+            <input
+              id="field_dataExpirare"
+              data-cy="dataExpirare"
+              type="text"
+              class="form-control"
+              name="dataExpirare"
+              ngbDatepicker
+              #dataExpirareDp="ngbDatepicker"
+              formControlName="dataExpirare"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataExpirareDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dilutie">Dilutie</label>
+          <input type="text" class="form-control" name="dilutie" id="field_dilutie" data-cy="dilutie" formControlName="dilutie" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_timpContact">Timp Contact</label>
+          <input
+            type="number"
+            class="form-control"
+            name="timpContact"
+            id="field_timpContact"
+            data-cy="timpContact"
+            formControlName="timpContact"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_metodaAplicare">Metoda Aplicare</label>
+          <input
+            type="text"
+            class="form-control"
+            name="metodaAplicare"
+            id="field_metodaAplicare"
+            data-cy="metodaAplicare"
+            formControlName="metodaAplicare"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_gramaj">Gramaj</label>
+          <input type="number" class="form-control" name="gramaj" id="field_gramaj" data-cy="gramaj" formControlName="gramaj" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cantitate">Cantitate</label>
+          <input type="number" class="form-control" name="cantitate" id="field_cantitate" data-cy="cantitate" formControlName="cantitate" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_companie">Companie</label>
+          <select
+            class="form-control"
+            id="field_companie"
+            data-cy="companie"
+            name="companie"
+            formControlName="companie"
+            [compareWith]="compareCompanie"
+          >
+            @if (editForm.get(['companie'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (companieOption of companiesSharedCollection; track $index) {
+              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
+          <div>
+            @if (editForm.get(['companie'])?.errors?.required) {
+              <small class="form-text text-danger">Acest câmp este necesar.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

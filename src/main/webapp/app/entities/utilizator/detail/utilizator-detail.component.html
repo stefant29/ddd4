@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (utilizator) {
+      <div>
+        <h2 data-cy="utilizatorDetailsHeading">
+          <p-button
+            pRipple
+            [rounded]="true"
+            icon="pi pi-arrow-left"
+            type="submit"
+            (click)="previousState()"
+            severity="secondary"
+          ></p-button>
+
+          <span>{{ utilizator.nume }} {{ utilizator.prenume }}</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>Nume</span></dt>
+          <dd>
+            <span>{{ utilizator.nume }}</span>
+          </dd>
+          <dt><span>Prenume</span></dt>
+          <dd>
+            <span>{{ utilizator.prenume }}</span>
+          </dd>
+          <dt><span>Functie</span></dt>
+          <dd>
+            <span>{{ utilizator.functie }}</span>
+          </dd>
+        </dl>
+
+        <p-button
+          pRipple
+          label="Editare"
+          icon="pi pi-pencil"
+          type="submit"
+          [routerLink]="['/utilizator', utilizator.id, 'edit']"
+        ></p-button>
+      </div>
+    }
+  </div>
+</div>

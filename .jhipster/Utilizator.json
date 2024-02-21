@@ -1,0 +1,56 @@
+{
+  "annotations": {
+    "changelogDate": "20240205135750"
+  },
+  "applications": "*",
+  "entityTableName": "utilizator",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nume",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "prenume",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "functie",
+      "fieldType": "Functie",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUPERADMIN,ADMIN,OPERATOR"
+    }
+  ],
+  "name": "Utilizator",
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "procesVerbal",
+      "otherEntityRelationshipName": "operator",
+      "relationshipName": "proceseVerbale",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "companie",
+      "otherEntityRelationshipName": "utilizatori",
+      "relationshipName": "companie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no"
+}

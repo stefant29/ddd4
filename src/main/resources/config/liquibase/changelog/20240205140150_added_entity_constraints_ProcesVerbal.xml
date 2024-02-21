@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity ProcesVerbal.
+    -->
+    <changeSet id="20240205140150-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="companie_id"
+                                 baseTableName="proces_verbal"
+                                 constraintName="fk_proces_verbal__companie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="companie"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="proces_verbal"
+                                 constraintName="fk_proces_verbal__client_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="operator_id"
+                                 baseTableName="proces_verbal"
+                                 constraintName="fk_proces_verbal__operator_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="utilizator"
+                                 />
+    </changeSet>
+</databaseChangeLog>
