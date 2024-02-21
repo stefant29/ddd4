@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { createRequestOption } from 'app/core/request/request-util';
+import { createRequestOption, createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
 import { IUtilizator, NewUtilizator } from '../utilizator.model';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 export type PartialUpdateUtilizator = Partial<IUtilizator> & Pick<IUtilizator, 'id'>;
 
@@ -39,6 +40,11 @@ export class UtilizatorService {
 
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IUtilizator>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<EntityArrayResponseType> {
+    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
+    return this.http.get<IUtilizator[]>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

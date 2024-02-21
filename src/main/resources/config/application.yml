@@ -15,6 +15,10 @@
 # ===================================================================
 
 ---
+ddd:
+  new-user:
+    default-password: '123456abc-123.DDD'
+---
 # Conditionally disable springdoc on missing api-docs profile
 spring:
   config:

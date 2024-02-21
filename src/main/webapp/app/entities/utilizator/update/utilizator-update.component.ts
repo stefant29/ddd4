@@ -50,8 +50,6 @@ export class UtilizatorUpdateComponent implements OnInit {
       if (utilizator) {
         this.updateForm(utilizator);
       }
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -92,28 +90,9 @@ export class UtilizatorUpdateComponent implements OnInit {
     this.utilizator = utilizator;
     this.utilizatorFormService.resetForm(this.editForm, utilizator);
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, utilizator.user);
     this.companiesSharedCollection = this.companieService.addCompanieToCollectionIfMissing<ICompanie>(
       this.companiesSharedCollection,
       utilizator.companie,
     );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.userService
-      .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.utilizator?.user)))
-      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
-
-    this.companieService
-      .query()
-      .pipe(map((res: HttpResponse<ICompanie[]>) => res.body ?? []))
-      .pipe(
-        map((companies: ICompanie[]) =>
-          this.companieService.addCompanieToCollectionIfMissing<ICompanie>(companies, this.utilizator?.companie),
-        ),
-      )
-      .subscribe((companies: ICompanie[]) => (this.companiesSharedCollection = companies));
   }
 }

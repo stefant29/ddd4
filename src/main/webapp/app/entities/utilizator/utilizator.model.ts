@@ -1,5 +1,3 @@
-import { IUser } from 'app/entities/user/user.model';
-import { IProcesVerbal } from 'app/entities/proces-verbal/proces-verbal.model';
 import { ICompanie } from 'app/entities/companie/companie.model';
 import { Functie } from 'app/entities/enumerations/functie.model';
 
@@ -8,8 +6,7 @@ export interface IUtilizator {
   nume?: string | null;
   prenume?: string | null;
   functie?: keyof typeof Functie | null;
-  user?: Pick<IUser, 'id'> | null;
-  proceseVerbales?: IProcesVerbal[] | null;
+  email?: string | null;
   companie?: ICompanie | null;
 }
 

@@ -48,49 +48,21 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_user">User</label>
-          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
-            @if (!editForm.get('user')!.value) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (userOption of usersSharedCollection; track $index) {
-              <option [ngValue]="userOption">{{ userOption.id }}</option>
-            }
-          </select>
+          <label class="form-label" for="field_email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
+            <div>
+              @if (editForm.get('email')?.errors?.required) {
+                <small class="form-text text-danger">Acest câmp este necesar.</small>
+              }
+            </div>
+            <div>
+              @if (editForm.get('email')?.errors?.email) {
+                <small class="form-text text-danger">Adresa de email nu este valida!</small>
+              }
+            </div>
+          }
         </div>
-        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
-          <div>
-            @if (editForm.get(['user'])?.errors?.required) {
-              <small class="form-text text-danger">Acest câmp este necesar.</small>
-            }
-          </div>
-        }
-
-        <div class="mb-3">
-          <label class="form-label" for="field_companie">Companie</label>
-          <select
-            class="form-control"
-            id="field_companie"
-            data-cy="companie"
-            name="companie"
-            formControlName="companie"
-            [compareWith]="compareCompanie"
-          >
-            @if (editForm.get(['companie'])!.value == null) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (companieOption of companiesSharedCollection; track $index) {
-              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
-          <div>
-            @if (editForm.get(['companie'])?.errors?.required) {
-              <small class="form-text text-danger">Acest câmp este necesar.</small>
-            }
-          </div>
-        }
       </div>
 
       <div>

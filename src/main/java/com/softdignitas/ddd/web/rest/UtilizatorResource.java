@@ -1,8 +1,18 @@
 package com.softdignitas.ddd.web.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softdignitas.ddd.domain.User;
 import com.softdignitas.ddd.domain.Utilizator;
+import com.softdignitas.ddd.repository.UserRepository;
 import com.softdignitas.ddd.repository.UtilizatorRepository;
+import com.softdignitas.ddd.security.SecurityUtils;
+import com.softdignitas.ddd.service.dto.UtilizatorDTO;
+import com.softdignitas.ddd.service.mapper.UserMapper;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
+import com.softdignitas.ddd.web.rest.errors.RecordNotFoundException;
+import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -13,6 +23,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,30 +41,62 @@ public class UtilizatorResource {
 
     private final Logger log = LoggerFactory.getLogger(UtilizatorResource.class);
 
+    private final TableLazyLoadEventMapper tableLazyLoadEventMapper;
+
     private static final String ENTITY_NAME = "utilizator";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final UtilizatorRepository utilizatorRepository;
+    private final UserRepository userRepository;
 
-    public UtilizatorResource(UtilizatorRepository utilizatorRepository) {
+    private final UserMapper userMapper;
+
+    public UtilizatorResource(
+        UtilizatorRepository utilizatorRepository,
+        UserRepository userRepository,
+        UserMapper userMapper,
+        TableLazyLoadEventMapper tableLazyLoadEventMapper
+    ) {
         this.utilizatorRepository = utilizatorRepository;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.tableLazyLoadEventMapper = tableLazyLoadEventMapper;
     }
 
     /**
      * {@code POST  /utilizators} : Create a new utilizator.
      *
-     * @param utilizator the utilizator to create.
+     * @param utilizatorDTO the utilizator to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new utilizator, or with status {@code 400 (Bad Request)} if the utilizator has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Utilizator> createUtilizator(@Valid @RequestBody Utilizator utilizator) throws URISyntaxException {
-        log.debug("REST request to save Utilizator : {}", utilizator);
-        if (utilizator.getId() != null) {
+    public ResponseEntity<Utilizator> createUtilizator(@Valid @RequestBody UtilizatorDTO utilizatorDTO) throws URISyntaxException {
+        log.debug("REST request to save Utilizator : {}", utilizatorDTO);
+        if (utilizatorDTO.getId() != null) {
             throw new BadRequestAlertException("A new utilizator cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        /* create user  */
+        User user = userMapper.createNewUserFromUtilizatorDto(utilizatorDTO);
+        User savedUser = userRepository.save(user);
+
+        utilizatorDTO.setUser(savedUser);
+
+        Utilizator utilizator = userMapper.fromUtilizatorDto(utilizatorDTO);
+        // get current company
+
+        utilizator.companie(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .flatMap(userRepository::findOneByLogin)
+                .flatMap(utilizatorRepository::findOneByUser)
+                .orElseThrow(() -> new RecordNotFoundException("UTILIZATOR", ""))
+                .getCompanie()
+        );
+
         Utilizator result = utilizatorRepository.save(utilizator);
         return ResponseEntity
             .created(new URI("/api/utilizators/" + result.getId()))
@@ -151,9 +195,27 @@ public class UtilizatorResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of utilizators in body.
      */
     @GetMapping("")
-    public List<Utilizator> getAllUtilizators() {
+    public List<Utilizator> getAllUtilizators(TableLazyLoadEvent tableLazyLoadEvent) {
         log.debug("REST request to get all Utilizators");
-        return utilizatorRepository.findAll();
+
+        int page = 0;
+        int size = 10;
+
+        if (tableLazyLoadEvent.getRows() != null) {
+            size = tableLazyLoadEvent.getRows();
+            if (tableLazyLoadEvent.getFirst() != null) {
+                page = tableLazyLoadEvent.getFirst() / tableLazyLoadEvent.getRows();
+            }
+        }
+
+        Sort sort = Sort.unsorted();
+        if (tableLazyLoadEvent.getSortField() != null && tableLazyLoadEvent.getSortOrder() != null) {
+            sort = Sort.by(tableLazyLoadEvent.getSortOrder().getSortDirection(), tableLazyLoadEvent.getSortField());
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        return utilizatorRepository.findAll(pageRequest).stream().toList();
     }
 
     /**

@@ -1,4 +1,5 @@
 import { HttpParams } from '@angular/common/http';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 export const createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
@@ -20,4 +21,19 @@ export const createRequestOption = (req?: any): HttpParams => {
   }
 
   return options;
+};
+
+export const createReuqestFromTableLazyLoadEvent = (event?: TableLazyLoadEvent): HttpParams => {
+  let params = new HttpParams();
+
+  if (!!event) {
+    params = params.set('first', '' + event.first);
+    params = params.set('rows', '' + event.rows);
+    if (!!event.sortField) {
+      params = params.set('sortField', '' + event.sortField);
+      params = params.set('sortOrder', event.sortOrder === 1 ? 'ASC' : 'DESC');
+    }
+  }
+
+  return params;
 };

@@ -2,13 +2,17 @@ package com.softdignitas.ddd.service.mapper;
 
 import com.softdignitas.ddd.domain.Authority;
 import com.softdignitas.ddd.domain.User;
+import com.softdignitas.ddd.domain.Utilizator;
 import com.softdignitas.ddd.service.dto.AdminUserDTO;
 import com.softdignitas.ddd.service.dto.UserDTO;
+import com.softdignitas.ddd.service.dto.UtilizatorDTO;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +23,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserMapper {
+
+    @Value("${ddd.new-user.default-password}")
+    private String NEW_USER_DEFAULT_PASSWORD;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public UserMapper(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).toList();
@@ -55,6 +68,25 @@ public class UserMapper {
             user.setLangKey(userDTO.getLangKey());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
+            return user;
+        }
+    }
+
+    public Utilizator fromUtilizatorDto(UtilizatorDTO utilizatorDTO) {
+        return new Utilizator(utilizatorDTO);
+    }
+
+    public User createNewUserFromUtilizatorDto(UtilizatorDTO utilizatorDTO) {
+        if (utilizatorDTO == null) {
+            return null;
+        } else {
+            User user = new User();
+            user.setLogin(utilizatorDTO.getNume() + "_" + utilizatorDTO.getPrenume());
+            user.setPassword(passwordEncoder.encode(NEW_USER_DEFAULT_PASSWORD));
+            user.setFirstName(utilizatorDTO.getPrenume());
+            user.setLastName(utilizatorDTO.getNume());
+            user.setEmail(utilizatorDTO.getEmail());
+            user.setActivated(true);
             return user;
         }
     }

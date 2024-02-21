@@ -21,8 +21,7 @@ type UtilizatorFormGroupContent = {
   nume: FormControl<IUtilizator['nume']>;
   prenume: FormControl<IUtilizator['prenume']>;
   functie: FormControl<IUtilizator['functie']>;
-  user: FormControl<IUtilizator['user']>;
-  companie: FormControl<IUtilizator['companie']>;
+  email: FormControl<IUtilizator['email']>;
 };
 
 export type UtilizatorFormGroup = FormGroup<UtilizatorFormGroupContent>;
@@ -51,11 +50,8 @@ export class UtilizatorFormService {
       functie: new FormControl(utilizatorRawValue.functie, {
         validators: [Validators.required],
       }),
-      user: new FormControl(utilizatorRawValue.user, {
-        validators: [Validators.required],
-      }),
-      companie: new FormControl(utilizatorRawValue.companie, {
-        validators: [Validators.required],
+      email: new FormControl(utilizatorRawValue.email, {
+        validators: [Validators.required, Validators.email],
       }),
     });
   }

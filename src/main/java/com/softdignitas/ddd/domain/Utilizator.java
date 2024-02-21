@@ -2,11 +2,13 @@ package com.softdignitas.ddd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.softdignitas.ddd.domain.enumeration.Functie;
+import com.softdignitas.ddd.service.dto.UtilizatorDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.UuidGenerator;
 
 /**
  * A Utilizator.
@@ -19,7 +21,7 @@ public class Utilizator implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
     @Column(name = "id")
     private String id;
 
@@ -38,7 +40,7 @@ public class Utilizator implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(referencedColumnName = "id", unique = true)
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "operator")
@@ -51,6 +53,16 @@ public class Utilizator implements Serializable {
     private Companie companie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
+    public Utilizator() {}
+
+    public Utilizator(UtilizatorDTO utilizatorDTO) {
+        this.id = utilizatorDTO.getId();
+        this.nume = utilizatorDTO.getNume();
+        this.prenume = utilizatorDTO.getPrenume();
+        this.functie = utilizatorDTO.getFunctie();
+        this.user = utilizatorDTO.getUser();
+    }
 
     public String getId() {
         return this.id;
