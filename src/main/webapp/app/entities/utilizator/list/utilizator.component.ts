@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IUtilizator } from '../utilizator.model';
-import { EntityArrayResponseType, UtilizatorService } from '../service/utilizator.service';
+import { EntityArrayResponseType, PageableResponse, UtilizatorService } from '../service/utilizator.service';
 import { UtilizatorDeleteDialogComponent } from '../delete/utilizator-delete-dialog.component';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -18,6 +18,7 @@ import { MessageService, SelectItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { DDDEntitate } from 'app/entities/ddd-entitate';
 
 @Component({
   standalone: true,
@@ -41,12 +42,12 @@ import { InputTextModule } from 'primeng/inputtext';
   providers: [MessageService],
 })
 export class UtilizatorComponent implements OnInit {
-  utilizators!: IUtilizator[];
+  utilizators!: DDDEntitate[];
 
   clonedProducts: { [s: string]: IUtilizator } = {};
   functii!: SelectItem[];
 
-  totalRecords = 10;
+  totalRecords = 0;
   loading: boolean = true;
 
   constructor(
@@ -73,8 +74,15 @@ export class UtilizatorComponent implements OnInit {
     this.loading = true;
   }
 
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
-    this.utilizators = response.body ?? [];
+  protected onResponseSuccess(response: PageableResponse): void {
+    if (!response.body) {
+      alert('No body');
+    } else {
+      this.utilizators = response.body.content ?? [];
+      console.log(this.totalRecords);
+      this.totalRecords = response.body.totalElements;
+      console.log(this.totalRecords);
+    }
   }
 
   onRowEditInit(utilizator: IUtilizator) {
@@ -107,7 +115,7 @@ export class UtilizatorComponent implements OnInit {
 
     setTimeout(() => {
       this.utilizatorService.getList(event).subscribe({
-        next: (res: EntityArrayResponseType) => {
+        next: (res: PageableResponse) => {
           console.log('RES: ', res);
 
           this.onResponseSuccess(res);

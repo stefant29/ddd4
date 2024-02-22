@@ -1,7 +1,8 @@
 import { ICompanie } from 'app/entities/companie/companie.model';
 import { Functie } from 'app/entities/enumerations/functie.model';
+import { DDDEntitate } from '../ddd-entitate';
 
-export interface IUtilizator {
+export class IUtilizator extends DDDEntitate {
   id: string;
   nume?: string | null;
   prenume?: string | null;

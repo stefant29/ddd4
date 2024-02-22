@@ -19,7 +19,7 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (utilizators?.length === 0) {
+  @if (!!utilizators && utilizators.length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span>No Utilizators found</span>
     </div>
@@ -34,7 +34,7 @@
     editMode="row"
     [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"
-    [rows]="10"
+    [rows]="3"
     [totalRecords]="totalRecords"
     [loading]="loading"
     [globalFilterFields]="['nume', 'prenume', 'functie']"

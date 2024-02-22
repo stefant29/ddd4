@@ -1,7 +1,5 @@
 package com.softdignitas.ddd.web.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softdignitas.ddd.domain.User;
 import com.softdignitas.ddd.domain.Utilizator;
 import com.softdignitas.ddd.repository.UserRepository;
@@ -11,20 +9,15 @@ import com.softdignitas.ddd.service.dto.UtilizatorDTO;
 import com.softdignitas.ddd.service.mapper.UserMapper;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
 import com.softdignitas.ddd.web.rest.errors.RecordNotFoundException;
-import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +30,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/utilizators")
 @Transactional
-public class UtilizatorResource {
+public class UtilizatorResource extends DDDEntitateResource {
 
     private final Logger log = LoggerFactory.getLogger(UtilizatorResource.class);
 
@@ -63,6 +56,8 @@ public class UtilizatorResource {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.tableLazyLoadEventMapper = tableLazyLoadEventMapper;
+
+        super.repository = utilizatorRepository;
     }
 
     /**
@@ -187,35 +182,6 @@ public class UtilizatorResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, utilizator.getId())
         );
-    }
-
-    /**
-     * {@code GET  /utilizators} : get all the utilizators.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of utilizators in body.
-     */
-    @GetMapping("")
-    public List<Utilizator> getAllUtilizators(TableLazyLoadEvent tableLazyLoadEvent) {
-        log.debug("REST request to get all Utilizators");
-
-        int page = 0;
-        int size = 10;
-
-        if (tableLazyLoadEvent.getRows() != null) {
-            size = tableLazyLoadEvent.getRows();
-            if (tableLazyLoadEvent.getFirst() != null) {
-                page = tableLazyLoadEvent.getFirst() / tableLazyLoadEvent.getRows();
-            }
-        }
-
-        Sort sort = Sort.unsorted();
-        if (tableLazyLoadEvent.getSortField() != null && tableLazyLoadEvent.getSortOrder() != null) {
-            sort = Sort.by(tableLazyLoadEvent.getSortOrder().getSortDirection(), tableLazyLoadEvent.getSortField());
-        }
-
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-
-        return utilizatorRepository.findAll(pageRequest).stream().toList();
     }
 
     /**

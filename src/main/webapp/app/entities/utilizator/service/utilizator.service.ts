@@ -7,11 +7,13 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption, createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
 import { IUtilizator, NewUtilizator } from '../utilizator.model';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { PageResponse } from 'app/shared/pageable/page-response';
 
 export type PartialUpdateUtilizator = Partial<IUtilizator> & Pick<IUtilizator, 'id'>;
 
 export type EntityResponseType = HttpResponse<IUtilizator>;
 export type EntityArrayResponseType = HttpResponse<IUtilizator[]>;
+export type PageableResponse = HttpResponse<PageResponse>;
 
 @Injectable({ providedIn: 'root' })
 export class UtilizatorService {
@@ -42,9 +44,9 @@ export class UtilizatorService {
     return this.http.get<IUtilizator>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  getList(lazyEvent?: TableLazyLoadEvent): Observable<EntityArrayResponseType> {
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
     let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
-    return this.http.get<IUtilizator[]>(this.resourceUrl, { params: params, observe: 'response' });
+    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
