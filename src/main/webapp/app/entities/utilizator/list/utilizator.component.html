@@ -46,6 +46,26 @@
         <th pSortableColumn="functie" style="width: 25%">Functie <p-sortIcon field="functie"></p-sortIcon></th>
         <th style="width: 25%"></th>
       </tr>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="nume"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="prenume"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="functie" matchMode="equals" [showMenu]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown [ngModel]="value" [options]="functii" (onChange)="filter($event.value)" placeholder="Any" [showClear]="true">
+                <ng-template let-option pTemplate="item">
+                  <p-tag [value]="option.label" [severity]="getSeverity(option.label)"></p-tag>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th></th>
+      </tr>
     </ng-template>
     <ng-template pTemplate="body" let-utilizator let-editing="editing" let-ri="rowIndex">
       <tr [pEditableRow]="utilizator">

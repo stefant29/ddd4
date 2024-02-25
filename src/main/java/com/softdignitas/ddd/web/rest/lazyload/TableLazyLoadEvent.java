@@ -6,8 +6,8 @@ public class TableLazyLoadEvent {
     private Integer rows;
     private String sortField;
     private SortOrder sortOrder;
+    private String filters;
 
-    //    private Map<String, FilterMetadata[]> filters;
     //    private String globalFilter;
     //    private SortMeta[] multiSortMeta;
     //    private Function<Object, Object> forceUpdate;
@@ -45,12 +45,12 @@ public class TableLazyLoadEvent {
     public void setSortOrder(SortOrder sortOrder) {
         this.sortOrder = sortOrder;
     }
-    //
-    //    public Integer getLast() {
-    //        return last;
-    //    }
-    //
-    //    public void setLast(Integer last) {
-    //        this.last = last;
-    //    }
+
+    public String getFilters() {
+        return filters;
+    }
+
+    public void setFilters(String filters) {
+        this.filters = filters;
+    }
 }

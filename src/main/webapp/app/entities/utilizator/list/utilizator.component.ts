@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { FormsModule } from '@angular/forms';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IUtilizator } from '../utilizator.model';
-import { EntityArrayResponseType, PageableResponse, UtilizatorService } from '../service/utilizator.service';
-import { UtilizatorDeleteDialogComponent } from '../delete/utilizator-delete-dialog.component';
+import { PageableResponse, UtilizatorService } from '../service/utilizator.service';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { MessageService, SelectItem } from 'primeng/api';
@@ -19,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { DDDEntitate } from 'app/entities/ddd-entitate';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   standalone: true,
@@ -38,6 +36,7 @@ import { DDDEntitate } from 'app/entities/ddd-entitate';
     ButtonModule,
     DropdownModule,
     InputTextModule,
+    TagModule,
   ],
   providers: [MessageService],
 })
@@ -66,9 +65,8 @@ export class UtilizatorComponent implements OnInit {
     // TODO: get functii
     // TODO: get functii
     this.functii = [
-      { label: 'In Stock', value: 'INSTOCK' },
-      { label: 'Low Stock', value: 'LOWSTOCK' },
-      { label: 'Out of Stock', value: 'OUTOFSTOCK' },
+      { label: 'Operator', value: 'OPERATOR' },
+      { label: 'Admin', value: 'ADMIN' },
     ];
 
     this.loading = true;
@@ -113,15 +111,26 @@ export class UtilizatorComponent implements OnInit {
 
     this.loading = true;
 
-    setTimeout(() => {
-      this.utilizatorService.getList(event).subscribe({
-        next: (res: PageableResponse) => {
-          console.log('RES: ', res);
+    this.utilizatorService.getList(event).subscribe({
+      next: (res: PageableResponse) => {
+        console.log('RES: ', res);
 
-          this.onResponseSuccess(res);
-          this.loading = false;
-        },
-      });
-    }, 1000);
+        this.onResponseSuccess(res);
+        this.loading = false;
+      },
+    });
+  }
+
+  getSeverity(functie: string) {
+    switch (functie) {
+      case 'Operator':
+        return 'info';
+
+      case 'Admin':
+        return 'success';
+
+      default:
+        return '';
+    }
   }
 }

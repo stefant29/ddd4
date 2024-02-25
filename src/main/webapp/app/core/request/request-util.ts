@@ -29,6 +29,10 @@ export const createReuqestFromTableLazyLoadEvent = (event?: TableLazyLoadEvent):
   if (!!event) {
     params = params.set('first', '' + event.first);
     params = params.set('rows', '' + event.rows);
+
+    if (!!event.filters) {
+      params = params.set('filters', JSON.stringify(event.filters));
+    }
     if (!!event.sortField) {
       params = params.set('sortField', '' + event.sortField);
       params = params.set('sortOrder', event.sortOrder === 1 ? 'ASC' : 'DESC');

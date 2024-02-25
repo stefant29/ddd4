@@ -1,17 +1,26 @@
 package com.softdignitas.ddd.web.rest.lazyload;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class FilterMetadata {
 
-    private Object value;
+    private String value;
     private String matchMode;
     private String operator;
 
+    public FilterMetadata(Map<String, String> map) {
+        this.value = map.get("value");
+        this.matchMode = map.get("matchMode");
+        this.operator = map.get("operator");
+    }
+
     // Getters and setters
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

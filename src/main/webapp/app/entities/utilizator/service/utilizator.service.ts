@@ -24,6 +24,11 @@ export class UtilizatorService {
     protected applicationConfigService: ApplicationConfigService,
   ) {}
 
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
+    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
+    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
+  }
+
   create(utilizator: NewUtilizator): Observable<EntityResponseType> {
     return this.http.post<IUtilizator>(this.resourceUrl, utilizator, { observe: 'response' });
   }
@@ -42,11 +47,6 @@ export class UtilizatorService {
 
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IUtilizator>(`${this.resourceUrl}/${id}`, { observe: 'response' });
-  }
-
-  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
-    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
-    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
