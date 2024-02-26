@@ -34,8 +34,6 @@ public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
 
     private final Logger log = LoggerFactory.getLogger(UtilizatorResource.class);
 
-    private final TableLazyLoadEventMapper tableLazyLoadEventMapper;
-
     private static final String ENTITY_NAME = "utilizator";
 
     @Value("${jhipster.clientApp.name}")
@@ -46,18 +44,10 @@ public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
 
     private final UserMapper userMapper;
 
-    public UtilizatorResource(
-        UtilizatorRepository utilizatorRepository,
-        UserRepository userRepository,
-        UserMapper userMapper,
-        TableLazyLoadEventMapper tableLazyLoadEventMapper
-    ) {
+    public UtilizatorResource(UtilizatorRepository utilizatorRepository, UserRepository userRepository, UserMapper userMapper) {
         this.utilizatorRepository = utilizatorRepository;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.tableLazyLoadEventMapper = tableLazyLoadEventMapper;
-
-        super.repository = utilizatorRepository;
     }
 
     /**
