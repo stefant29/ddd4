@@ -2,7 +2,12 @@ package com.softdignitas.ddd.web.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softdignitas.ddd.domain.Companie;
 import com.softdignitas.ddd.repository.DDDRepository;
+import com.softdignitas.ddd.repository.UserRepository;
+import com.softdignitas.ddd.repository.UtilizatorRepository;
+import com.softdignitas.ddd.security.SecurityUtils;
+import com.softdignitas.ddd.web.rest.errors.RecordNotFoundException;
 import com.softdignitas.ddd.web.rest.lazyload.FilterMetadata;
 import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
 import jakarta.persistence.criteria.Predicate;
@@ -12,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,17 +33,35 @@ public class DDDEntitateResource {
 
     private final ObjectMapper objectMapper;
 
+    @Autowired
+    private UtilizatorRepository utilizatorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     DDDRepository repository;
 
     public DDDEntitateResource() {
         this.objectMapper = new ObjectMapper();
     }
 
+    private Specification<?> filterByCompanie(Specification<?> specification) {
+        final Companie companie = SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .flatMap(utilizatorRepository::findOneByUser)
+            .orElseThrow(() -> new RecordNotFoundException("UTILIZATOR", ""))
+            .getCompanie();
+
+        return specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("companie"), companie));
+    }
+
     @GetMapping("")
     public Page<?> getAll(TableLazyLoadEvent tableLazyLoadEvent) throws JsonProcessingException {
         Map filters = objectMapper.readValue(tableLazyLoadEvent.getFilters(), Map.class);
+        Specification<?> filtersSpecification = filterByCompanie(getSpecification(filters));
 
-        return repository.findAll(getSpecification(filters), getPageable(tableLazyLoadEvent));
+        return repository.findAll(filtersSpecification, getPageable(tableLazyLoadEvent));
     }
 
     private Pageable getPageable(TableLazyLoadEvent tableLazyLoadEvent) {
