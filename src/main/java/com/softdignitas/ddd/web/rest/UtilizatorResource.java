@@ -30,7 +30,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/utilizators")
 @Transactional
-public class UtilizatorResource extends DDDEntitateResource {
+public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
 
     private final Logger log = LoggerFactory.getLogger(UtilizatorResource.class);
 

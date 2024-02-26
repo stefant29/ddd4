@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DDDEntitateResource {
+public class DDDEntitateResource<T> {
 
     private final Logger log = LoggerFactory.getLogger(DDDEntitateResource.class);
 
@@ -45,7 +45,7 @@ public class DDDEntitateResource {
         this.objectMapper = new ObjectMapper();
     }
 
-    private Specification<?> filterByCompanie(Specification<?> specification) {
+    private Specification<T> filterByCompanie(Specification<T> specification) {
         final Companie companie = SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -57,9 +57,9 @@ public class DDDEntitateResource {
     }
 
     @GetMapping("")
-    public Page<?> getAll(TableLazyLoadEvent tableLazyLoadEvent) throws JsonProcessingException {
+    public Page<T> getAll(TableLazyLoadEvent tableLazyLoadEvent) throws JsonProcessingException {
         Map filters = objectMapper.readValue(tableLazyLoadEvent.getFilters(), Map.class);
-        Specification<?> filtersSpecification = filterByCompanie(getSpecification(filters));
+        Specification<T> filtersSpecification = filterByCompanie(getSpecification(filters));
 
         return repository.findAll(filtersSpecification, getPageable(tableLazyLoadEvent));
     }
@@ -83,7 +83,7 @@ public class DDDEntitateResource {
         return PageRequest.of(page, size, sort);
     }
 
-    private Specification<?> getSpecification(Map<String, LinkedHashMap<String, String>> filters) {
+    private Specification<T> getSpecification(Map<String, LinkedHashMap<String, String>> filters) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             for (Map.Entry<String, LinkedHashMap<String, String>> entry : filters.entrySet()) {
