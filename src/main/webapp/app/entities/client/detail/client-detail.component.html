@@ -2,7 +2,18 @@
   <div class="col-8">
     @if (client) {
       <div>
-        <h2 data-cy="clientDetailsHeading"><span>Client</span></h2>
+        <h2 data-cy="clientDetailsHeading">
+          <p-button
+            pRipple
+            [rounded]="true"
+            icon="pi pi-arrow-left"
+            type="submit"
+            (click)="previousState()"
+            severity="secondary"
+          ></p-button>
+
+          <span>Client: {{ client.denumire }}</span>
+        </h2>
 
         <hr />
 
@@ -11,10 +22,6 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Id</span></dt>
-          <dd>
-            <span>{{ client.id }}</span>
-          </dd>
           <dt><span>Denumire</span></dt>
           <dd>
             <span>{{ client.denumire }}</span>
@@ -47,51 +54,33 @@
           <dd>
             <span>{{ client.contract }}</span>
           </dd>
-          <dt><span>Deratizare</span></dt>
-          <dd>
-            <span>{{ client.deratizare }}</span>
-          </dd>
-          <dt><span>Dezinsectie</span></dt>
-          <dd>
-            <span>{{ client.dezinsectie }}</span>
-          </dd>
-          <dt><span>Dezinfectie</span></dt>
-          <dd>
-            <span>{{ client.dezinfectie }}</span>
-          </dd>
-          <dt><span>Frecventa Deratizare</span></dt>
-          <dd>
-            <span>{{ client.frecventaDeratizare }}</span>
-          </dd>
-          <dt><span>Frecventa Dezinsectie</span></dt>
-          <dd>
-            <span>{{ client.frecventaDezinsectie }}</span>
-          </dd>
-          <dt><span>Frecventa Dezinfectie</span></dt>
-          <dd>
-            <span>{{ client.frecventaDezinfectie }}</span>
-          </dd>
-          <dt><span>Companie</span></dt>
-          <dd>
-            @if (client.companie) {
-              <div>
-                <a [routerLink]="['/companie', client.companie.id, 'view']">{{ client.companie.id }}</a>
-              </div>
-            }
-          </dd>
+          @if (client.deratizare) {
+            <dt><span>Deratizare</span></dt>
+            <dd>
+              <span><i class="pi pi-check" style="color: slateblue"></i> (frecventa: {{ client.frecventaDeratizare }})</span>
+            </dd>
+          }
+          @if (client.dezinsectie) {
+            <dt><span>Dezinsectie</span></dt>
+            <dd>
+              <span><i class="pi pi-check" style="color: slateblue"></i> (frecventa: {{ client.frecventaDezinsectie }})</span>
+            </dd>
+          }
+          @if (client.dezinfectie) {
+            <dt><span>Dezinfectie</span></dt>
+            <dd>
+              <span><i class="pi pi-check" style="color: slateblue"></i> (frecventa: {{ client.frecventaDezinfectie }})</span>
+            </dd>
+          }
           <dt><span>Categorie</span></dt>
           <dd>
             @if (client.categorie) {
               <div>
-                <a [routerLink]="['/categorie-client', client.categorie.id, 'view']">{{ client.categorie.id }}</a>
+                <a [routerLink]="['/categorie-client', client.categorie.id, 'view']">{{ client.categorie.nume }}</a>
               </div>
             }
           </dd>
         </dl>
-
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
-        </button>
 
         <button type="button" [routerLink]="['/client', client.id, 'edit']" class="btn btn-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>

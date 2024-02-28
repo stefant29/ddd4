@@ -12,6 +12,15 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { IClient } from '../client.model';
 import { EntityArrayResponseType, ClientService } from '../service/client.service';
 import { ClientDeleteDialogComponent } from '../delete/client-delete-dialog.component';
+import { ToastModule } from 'primeng/toast';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
+import { DDDEntitate } from 'app/entities/ddd-entitate';
+import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
+import { MessageService, SelectItem } from 'primeng/api';
 
 @Component({
   standalone: true,
@@ -26,14 +35,20 @@ import { ClientDeleteDialogComponent } from '../delete/client-delete-dialog.comp
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ToastModule,
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    InputTextModule,
+    TagModule,
   ],
+  providers: [MessageService],
 })
 export class ClientComponent implements OnInit {
-  clients?: IClient[];
-  isLoading = false;
-
-  predicate = 'id';
-  ascending = true;
+  clients!: DDDEntitate[];
+  totalRecords = 0;
+  loading: boolean = true;
+  categorii!: SelectItem[];
 
   constructor(
     protected clientService: ClientService,
@@ -41,93 +56,52 @@ export class ClientComponent implements OnInit {
     public router: Router,
     protected sortService: SortService,
     protected modalService: NgbModal,
+    private messageService: MessageService,
   ) {}
 
   trackId = (_index: number, item: IClient): string => this.clientService.getClientIdentifier(item);
 
   ngOnInit(): void {
-    this.load();
+    // TODO: get categorii
+    // TODO: get categorii
+    // TODO: get categorii
+    this.categorii = [
+      { label: 'TODO', value: 'OPERATOR' },
+      { label: 'TODO', value: 'ADMIN' },
+    ];
+
+    this.loading = true;
   }
 
-  delete(client: IClient): void {
-    const modalRef = this.modalService.open(ClientDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.client = client;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
-      )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
+  protected onResponseSuccess(response: PageableResponse): void {
+    if (!response.body) {
+      alert('No body');
+    } else {
+      this.clients = response.body.content ?? [];
+      console.log(this.totalRecords);
+      this.totalRecords = response.body.totalElements;
+      console.log(this.totalRecords);
+    }
   }
 
-  load(): void {
-    this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
+  loadCustomers(event?: TableLazyLoadEvent) {
+    console.log('event S: ', event);
+
+    this.loading = true;
+
+    this.clientService.getList(event).subscribe({
+      next: (res: PageableResponse) => {
+        console.log('RES: ', res);
+
         this.onResponseSuccess(res);
+        this.loading = false;
       },
     });
   }
 
-  navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending);
-  }
+  onRowEditInit(client: IClient) {}
 
-  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
-    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
-    );
-  }
+  onRowEditSave(client: IClient) {}
 
-  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
-    this.predicate = sort[0];
-    this.ascending = sort[1] === ASC;
-  }
-
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.clients = this.refineData(dataFromBody);
-  }
-
-  protected refineData(data: IClient[]): IClient[] {
-    return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1));
-  }
-
-  protected fillComponentAttributesFromResponseBody(data: IClient[] | null): IClient[] {
-    return data ?? [];
-  }
-
-  protected queryBackend(predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
-    this.isLoading = true;
-    const queryObject: any = {
-      sort: this.getSortQueryParam(predicate, ascending),
-    };
-    return this.clientService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-  }
-
-  protected handleNavigation(predicate?: string, ascending?: boolean): void {
-    const queryParamsObj = {
-      sort: this.getSortQueryParam(predicate, ascending),
-    };
-
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParamsObj,
-    });
-  }
-
-  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
-    const ascendingQueryParam = ascending ? ASC : DESC;
-    if (predicate === '') {
-      return [];
-    } else {
-      return [predicate + ',' + ascendingQueryParam];
-    }
-  }
+  onRowEditCancel(client: IClient, index: number) {}
 }

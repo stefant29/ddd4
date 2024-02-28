@@ -4,8 +4,11 @@ import { Observable } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { createRequestOption } from 'app/core/request/request-util';
+import { createRequestOption, createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
 import { IClient, NewClient } from '../client.model';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
+import { PageResponse } from 'app/shared/pageable/page-response';
 
 export type PartialUpdateClient = Partial<IClient> & Pick<IClient, 'id'>;
 
@@ -20,6 +23,11 @@ export class ClientService {
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
   ) {}
+
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
+    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
+    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
+  }
 
   create(client: NewClient): Observable<EntityResponseType> {
     return this.http.post<IClient>(this.resourceUrl, client, { observe: 'response' });

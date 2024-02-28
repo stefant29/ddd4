@@ -41,10 +41,8 @@ public class DDDEntitateResource<T> {
 
     DDDRepository repository;
 
-    public DDDEntitateResource(DDDRepository repository) {
+    public DDDEntitateResource() {
         this.objectMapper = new ObjectMapper();
-
-        this.repository = repository;
     }
 
     private Specification<T> filterByCompanie(Specification<T> specification) {

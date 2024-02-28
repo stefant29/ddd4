@@ -25,7 +25,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/clients")
 @Transactional
-public class ClientResource {
+public class ClientResource extends DDDEntitateResource<Client> {
 
     private final Logger log = LoggerFactory.getLogger(ClientResource.class);
 
@@ -38,6 +38,8 @@ public class ClientResource {
 
     public ClientResource(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
+
+        super.repository = clientRepository;
     }
 
     /**
@@ -173,17 +175,6 @@ public class ClientResource {
             .map(clientRepository::save);
 
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, client.getId()));
-    }
-
-    /**
-     * {@code GET  /clients} : get all the clients.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of clients in body.
-     */
-    @GetMapping("")
-    public List<Client> getAllClients() {
-        log.debug("REST request to get all Clients");
-        return clientRepository.findAll();
     }
 
     /**

@@ -3,11 +3,6 @@
     <span>Clients</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh list</span>
-      </button>
-
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
@@ -24,193 +19,205 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (clients?.length === 0) {
+  @if (!!clients && clients.length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span>No Clients found</span>
     </div>
   }
 
-  @if (clients && clients.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span>Id</span>
+  <p-toast></p-toast>
+  <p-table
+    [value]="clients"
+    [lazy]="true"
+    (onLazyLoad)="loadCustomers($event)"
+    dataKey="id"
+    editMode="row"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="3"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [globalFilterFields]="['nume', 'prenume', 'functie']"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="denumire" style="width: 12%">Denumire <p-sortIcon field="denumire"></p-sortIcon></th>
+        <th pSortableColumn="codFiscal" style="width: 12%">Cod Fiscal <p-sortIcon field="codFiscal"></p-sortIcon></th>
+        <th pSortableColumn="adresaPunctLucru" style="width: 12%">Adresa Punct Lucru <p-sortIcon field="adresaPunctLucru"></p-sortIcon></th>
+        <th pSortableColumn="telefon" style="width: 12%">Telefon <p-sortIcon field="telefon"></p-sortIcon></th>
+        <th pSortableColumn="email" style="width: 12%">Email <p-sortIcon field="email"></p-sortIcon></th>
+        <th pSortableColumn="persoanaContact" style="width: 12%">Persoana Contact <p-sortIcon field="persoanaContact"></p-sortIcon></th>
+        <th pSortableColumn="contract" style="width: 12%">Contract <p-sortIcon field="contract"></p-sortIcon></th>
+        <th pSortableColumn="categorie" style="width: 12%">Categorie <p-sortIcon field="categorie"></p-sortIcon></th>
+        <th style="width: 12%">Tip Interventie + Frecventa</th>
+        <th style="width: 4%"></th>
+      </tr>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="denumire">
-              <div class="d-flex">
-                <span>Denumire</span>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="denumire"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="codFiscal"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="adresaPunctLucru"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="telefon"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="email"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="persoanaContact"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="contract"></p-columnFilter>
+        </th>
 
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="codFiscal">
-              <div class="d-flex">
-                <span>Cod Fiscal</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="numarRegistruComert">
-              <div class="d-flex">
-                <span>Numar Registru Comert</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="adresaPunctLucru">
-              <div class="d-flex">
-                <span>Adresa Punct Lucru</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="telefon">
-              <div class="d-flex">
-                <span>Telefon</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="email">
-              <div class="d-flex">
-                <span>Email</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="persoanaContact">
-              <div class="d-flex">
-                <span>Persoana Contact</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="contract">
-              <div class="d-flex">
-                <span>Contract</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="deratizare">
-              <div class="d-flex">
-                <span>Deratizare</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="dezinsectie">
-              <div class="d-flex">
-                <span>Dezinsectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="dezinfectie">
-              <div class="d-flex">
-                <span>Dezinfectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="frecventaDeratizare">
-              <div class="d-flex">
-                <span>Frecventa Deratizare</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="frecventaDezinsectie">
-              <div class="d-flex">
-                <span>Frecventa Dezinsectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="frecventaDezinfectie">
-              <div class="d-flex">
-                <span>Frecventa Dezinfectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="companie.id">
-              <div class="d-flex">
-                <span>Companie</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="categorie.id">
-              <div class="d-flex">
-                <span>Categorie</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (client of clients; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/client', client.id, 'view']">{{ client.id }}</a>
-              </td>
-              <td>{{ client.denumire }}</td>
-              <td>{{ client.codFiscal }}</td>
-              <td>{{ client.numarRegistruComert }}</td>
-              <td>{{ client.adresaPunctLucru }}</td>
-              <td>{{ client.telefon }}</td>
-              <td>{{ client.email }}</td>
-              <td>{{ client.persoanaContact }}</td>
-              <td>{{ client.contract }}</td>
-              <td>{{ client.deratizare }}</td>
-              <td>{{ client.dezinsectie }}</td>
-              <td>{{ client.dezinfectie }}</td>
-              <td>{{ client.frecventaDeratizare }}</td>
-              <td>{{ client.frecventaDezinsectie }}</td>
-              <td>{{ client.frecventaDezinfectie }}</td>
-              <td>
-                @if (client.companie) {
-                  <div>
-                    <a [routerLink]="['/companie', client.companie.id, 'view']">{{ client.companie.id }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (client.categorie) {
-                  <div>
-                    <a [routerLink]="['/categorie-client', client.categorie.id, 'view']">{{ client.categorie.id }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/client', client.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline">Vizualizare</span>
-                  </a>
-
-                  <a [routerLink]="['/client', client.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline">Editare</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(client)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline">Ștergere</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+        <th>
+          <p-columnFilter field="functie" matchMode="equals" [showMenu]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown [ngModel]="value" [options]="categorii" (onChange)="filter($event.value)" placeholder="Any" [showClear]="true">
+                <ng-template let-option pTemplate="item">
+                  <p-tag [value]="option.label"></p-tag>
+                </ng-template>
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-client let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="client">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.denumire" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.denumire }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.codFiscal" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.codFiscal }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.adresaPunctLucru" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.adresaPunctLucru }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.telefon" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.telefon }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.email" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.email }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.persoanaContact" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.persoanaContact }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.contract" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.contract }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="client.categorie.nume" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ client.categorie.nume }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td style="background-color: yellow">TODO</td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-eye"
+              [routerLink]="['/client', client.id, 'view']"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(client)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(client)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(client, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

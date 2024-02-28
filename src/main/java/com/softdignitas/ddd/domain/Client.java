@@ -78,7 +78,7 @@ public class Client implements Serializable {
     @JsonIgnoreProperties(value = { "utilizatoris", "clientis", "materiales", "proceseVerbales" }, allowSetters = true)
     private Companie companie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "clients" }, allowSetters = true)
     private CategorieClient categorie;
 
