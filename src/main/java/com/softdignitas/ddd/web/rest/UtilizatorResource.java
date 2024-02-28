@@ -45,6 +45,7 @@ public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
     private final UserMapper userMapper;
 
     public UtilizatorResource(UtilizatorRepository utilizatorRepository, UserRepository userRepository, UserMapper userMapper) {
+        super(utilizatorRepository);
         this.utilizatorRepository = utilizatorRepository;
         this.userRepository = userRepository;
         this.userMapper = userMapper;

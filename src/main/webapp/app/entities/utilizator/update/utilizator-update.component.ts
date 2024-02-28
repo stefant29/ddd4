@@ -15,12 +15,13 @@ import { Functie } from 'app/entities/enumerations/functie.model';
 import { UtilizatorService } from '../service/utilizator.service';
 import { IUtilizator } from '../utilizator.model';
 import { UtilizatorFormService, UtilizatorFormGroup } from './utilizator-form.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'jhi-utilizator-update',
   templateUrl: './utilizator-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, ButtonModule],
 })
 export class UtilizatorUpdateComponent implements OnInit {
   isSaving = false;

@@ -1,7 +1,11 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-utilizator-heading" data-cy="UtilizatorCreateUpdateHeading">Creeare sau editare Utilizator</h2>
+      <h2 id="jhi-utilizator-heading" data-cy="UtilizatorCreateUpdateHeading">
+        <p-button pRipple [rounded]="true" icon="pi pi-arrow-left" type="button" (click)="previousState()" severity="secondary"></p-button>
+
+        <span> Creeare sau editare Utilizator </span>
+      </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -66,10 +70,6 @@
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>
-        </button>
-
         <button
           type="submit"
           id="save-entity"
