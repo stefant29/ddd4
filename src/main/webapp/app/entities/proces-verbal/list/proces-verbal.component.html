@@ -3,11 +3,6 @@
     <span>Proces Verbals</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh list</span>
-      </button>
-
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
@@ -15,7 +10,7 @@
         [routerLink]="['/proces-verbal/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span>Creeare o nouă entitate Proces Verbal</span>
+        <span>Creeare un nou Proces Verbal</span>
       </button>
     </div>
   </h2>
@@ -24,174 +19,145 @@
 
   <jhi-alert></jhi-alert>
 
-  @if (procesVerbals?.length === 0) {
+  @if (!procesVerbals || procesVerbals.length === 0) {
     <div class="alert alert-warning" id="no-result">
       <span>No Proces Verbals found</span>
     </div>
   }
 
-  @if (procesVerbals && procesVerbals.length > 0) {
-    <div class="table-responsive table-entities" id="entities">
-      <table class="table table-striped" aria-describedby="page-heading">
-        <thead>
-          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span>Id</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="data">
-              <div class="d-flex">
-                <span>Data</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="ora">
-              <div class="d-flex">
-                <span>Ora</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="numarProcesVerbal">
-              <div class="d-flex">
-                <span>Numar Proces Verbal</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="reprezentant">
-              <div class="d-flex">
-                <span>Reprezentant</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="spatii">
-              <div class="d-flex">
-                <span>Spatii</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="suprafata">
-              <div class="d-flex">
-                <span>Suprafata</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="rapelDezinsectie">
-              <div class="d-flex">
-                <span>Rapel Dezinsectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="rapelDeratizare">
-              <div class="d-flex">
-                <span>Rapel Deratizare</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="garantieDezinsectie">
-              <div class="d-flex">
-                <span>Garantie Dezinsectie</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="garantieDeratizare">
-              <div class="d-flex">
-                <span>Garantie Deratizare</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="companie.id">
-              <div class="d-flex">
-                <span>Companie</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="client.id">
-              <div class="d-flex">
-                <span>Client</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="operator.id">
-              <div class="d-flex">
-                <span>Operator</span>
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (procesVerbal of procesVerbals; track trackId) {
-            <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/proces-verbal', procesVerbal.id, 'view']">{{ procesVerbal.id }}</a>
-              </td>
-              <td>{{ procesVerbal.data | formatMediumDate }}</td>
-              <td>{{ procesVerbal.ora | formatMediumDatetime }}</td>
-              <td>{{ procesVerbal.numarProcesVerbal }}</td>
-              <td>{{ procesVerbal.reprezentant }}</td>
-              <td>{{ procesVerbal.spatii }}</td>
-              <td>{{ procesVerbal.suprafata }}</td>
-              <td>{{ procesVerbal.rapelDezinsectie }}</td>
-              <td>{{ procesVerbal.rapelDeratizare }}</td>
-              <td>{{ procesVerbal.garantieDezinsectie }}</td>
-              <td>{{ procesVerbal.garantieDeratizare }}</td>
-              <td>
-                @if (procesVerbal.companie) {
-                  <div>
-                    <a [routerLink]="['/companie', procesVerbal.companie.id, 'view']">{{ procesVerbal.companie.id }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (procesVerbal.client) {
-                  <div>
-                    <a [routerLink]="['/client', procesVerbal.client.id, 'view']">{{ procesVerbal.client.id }}</a>
-                  </div>
-                }
-              </td>
-              <td>
-                @if (procesVerbal.operator) {
-                  <div>
-                    <a [routerLink]="['/utilizator', procesVerbal.operator.id, 'view']">{{ procesVerbal.operator.id }}</a>
-                  </div>
-                }
-              </td>
-              <td class="text-end">
-                <div class="btn-group">
-                  <a [routerLink]="['/proces-verbal', procesVerbal.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline">Vizualizare</span>
-                  </a>
-
-                  <a [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline">Editare</span>
-                  </a>
-
-                  <button type="submit" (click)="delete(procesVerbal)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline">Ștergere</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+  <p-toast></p-toast>
+  <p-table
+    [value]="procesVerbals"
+    [lazy]="true"
+    (onLazyLoad)="loadData($event)"
+    dataKey="id"
+    editMode="row"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [rows]="3"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [globalFilterFields]="['client', 'reprezentant', 'data', 'operator']"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="client" style="width: 15%">Client <p-sortIcon field="client"></p-sortIcon></th>
+        <th pSortableColumn="reprezentant" style="width: 15%">Reprezentant <p-sortIcon field="reprezentant"></p-sortIcon></th>
+        <th pSortableColumn="data" style="width: 15%">Data interventiei <p-sortIcon field="data"></p-sortIcon></th>
+        <th style="width: 10%">Tip procedura</th>
+        <th style="width: 10%">Produs</th>
+        <th style="width: 5%">Cantitate</th>
+        <th pSortableColumn="operator" style="width: 15%">Operator <p-sortIcon field="operator"></p-sortIcon></th>
+        <th style="width: 15%"></th>
+      </tr>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="client"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="text" field="reprezentant"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="date" field="data"></p-columnFilter>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>
+          <p-columnFilter type="text" field="operator"></p-columnFilter>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-procesVerbal let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="procesVerbal">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.client" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ procesVerbal.client }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.reprezentant" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ procesVerbal.reprezentant }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.data" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ procesVerbal.data }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.operator" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ procesVerbal.operator }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-eye"
+              [routerLink]="['/proces-verbal', procesVerbal.id, 'view']"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="!editing"
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(procesVerbal)"
+              class="p-button-rounded p-button-text"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(procesVerbal)"
+              class="p-button-rounded p-button-text p-button-success mr-2"
+            ></button>
+            <button
+              *ngIf="editing"
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(procesVerbal, ri)"
+              class="p-button-rounded p-button-text p-button-danger"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

@@ -12,6 +12,11 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IProcesVerbal, NewProcesVerbal } from '../proces-verbal.model';
 
+import { TableLazyLoadEvent } from 'primeng/table';
+import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
+import { PageResponse } from 'app/shared/pageable/page-response';
+import { createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
+
 export type PartialUpdateProcesVerbal = Partial<IProcesVerbal> & Pick<IProcesVerbal, 'id'>;
 
 type RestOf<T extends IProcesVerbal | NewProcesVerbal> = Omit<T, 'data' | 'ora'> & {
@@ -36,6 +41,11 @@ export class ProcesVerbalService {
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
   ) {}
+
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
+    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
+    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
+  }
 
   create(procesVerbal: NewProcesVerbal): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(procesVerbal);

@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/materials")
 @Transactional
-public class MaterialResource {
+public class MaterialResource extends DDDEntitateResource<Material> {
 
     private final Logger log = LoggerFactory.getLogger(MaterialResource.class);
 
@@ -38,6 +37,8 @@ public class MaterialResource {
 
     public MaterialResource(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;
+
+        super.repository = materialRepository;
     }
 
     /**
@@ -167,17 +168,6 @@ public class MaterialResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, material.getId())
         );
-    }
-
-    /**
-     * {@code GET  /materials} : get all the materials.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of materials in body.
-     */
-    @GetMapping("")
-    public List<Material> getAllMaterials() {
-        log.debug("REST request to get all Materials");
-        return materialRepository.findAll();
     }
 
     /**

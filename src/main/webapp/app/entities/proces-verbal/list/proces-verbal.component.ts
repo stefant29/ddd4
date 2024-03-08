@@ -1,17 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { FormsModule } from '@angular/forms';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IProcesVerbal } from '../proces-verbal.model';
-import { EntityArrayResponseType, ProcesVerbalService } from '../service/proces-verbal.service';
-import { ProcesVerbalDeleteDialogComponent } from '../delete/proces-verbal-delete-dialog.component';
+import { ProcesVerbalService } from '../service/proces-verbal.service';
+import { ToastModule } from 'primeng/toast';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
+import { DDDEntitate } from 'app/entities/ddd-entitate';
+import { IClient } from 'app/entities/client/client.model';
+import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
 
 @Component({
   standalone: true,
@@ -26,14 +33,19 @@ import { ProcesVerbalDeleteDialogComponent } from '../delete/proces-verbal-delet
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ToastModule,
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    InputTextModule,
+    TagModule,
   ],
+  providers: [MessageService],
 })
 export class ProcesVerbalComponent implements OnInit {
-  procesVerbals?: IProcesVerbal[];
-  isLoading = false;
-
-  predicate = 'id';
-  ascending = true;
+  procesVerbals!: DDDEntitate[];
+  totalRecords = 0;
+  loading: boolean = true;
 
   constructor(
     protected procesVerbalService: ProcesVerbalService,
@@ -46,88 +58,32 @@ export class ProcesVerbalComponent implements OnInit {
   trackId = (_index: number, item: IProcesVerbal): string => this.procesVerbalService.getProcesVerbalIdentifier(item);
 
   ngOnInit(): void {
-    this.load();
+    this.loading = true;
   }
 
-  delete(procesVerbal: IProcesVerbal): void {
-    const modalRef = this.modalService.open(ProcesVerbalDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.procesVerbal = procesVerbal;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
-      )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
+  protected onResponseSuccess(response: PageableResponse): void {
+    if (!response.body) {
+      alert('No body');
+    } else {
+      this.procesVerbals = response.body.content ?? [];
+      this.totalRecords = response.body.totalElements;
+    }
   }
 
-  load(): void {
-    this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
+  loadData(event?: TableLazyLoadEvent) {
+    this.loading = true;
+
+    this.procesVerbalService.getList(event).subscribe({
+      next: (res: PageableResponse) => {
         this.onResponseSuccess(res);
+        this.loading = false;
       },
     });
   }
 
-  navigateToWithComponentValues(): void {
-    this.handleNavigation(this.predicate, this.ascending);
-  }
+  onRowEditInit(client: IClient) {}
 
-  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
-    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
-    );
-  }
+  onRowEditSave(client: IClient) {}
 
-  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
-    this.predicate = sort[0];
-    this.ascending = sort[1] === ASC;
-  }
-
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.procesVerbals = this.refineData(dataFromBody);
-  }
-
-  protected refineData(data: IProcesVerbal[]): IProcesVerbal[] {
-    return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1));
-  }
-
-  protected fillComponentAttributesFromResponseBody(data: IProcesVerbal[] | null): IProcesVerbal[] {
-    return data ?? [];
-  }
-
-  protected queryBackend(predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
-    this.isLoading = true;
-    const queryObject: any = {
-      sort: this.getSortQueryParam(predicate, ascending),
-    };
-    return this.procesVerbalService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
-  }
-
-  protected handleNavigation(predicate?: string, ascending?: boolean): void {
-    const queryParamsObj = {
-      sort: this.getSortQueryParam(predicate, ascending),
-    };
-
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParamsObj,
-    });
-  }
-
-  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
-    const ascendingQueryParam = ascending ? ASC : DESC;
-    if (predicate === '') {
-      return [];
-    } else {
-      return [predicate + ',' + ascendingQueryParam];
-    }
-  }
+  onRowEditCancel(client: IClient, index: number) {}
 }

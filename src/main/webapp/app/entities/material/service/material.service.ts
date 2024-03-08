@@ -9,8 +9,11 @@ import dayjs from 'dayjs/esm';
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { createRequestOption } from 'app/core/request/request-util';
+import { createRequestOption, createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
 import { IMaterial, NewMaterial } from '../material.model';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
+import { PageResponse } from 'app/shared/pageable/page-response';
 
 export type PartialUpdateMaterial = Partial<IMaterial> & Pick<IMaterial, 'id'>;
 
@@ -36,6 +39,11 @@ export class MaterialService {
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
   ) {}
+
+  getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
+    let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
+    return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
+  }
 
   create(material: NewMaterial): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(material);

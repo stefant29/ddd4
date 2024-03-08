@@ -10,7 +10,7 @@
         [routerLink]="['/utilizator/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span>Creeare o nouă entitate Utilizator</span>
+        <span>Creeare un nou Utilizator</span>
       </button>
     </div>
   </h2>
@@ -29,7 +29,7 @@
   <p-table
     [value]="utilizators"
     [lazy]="true"
-    (onLazyLoad)="loadCustomers($event)"
+    (onLazyLoad)="loadData($event)"
     dataKey="id"
     editMode="row"
     [tableStyle]="{ 'min-width': '50rem' }"

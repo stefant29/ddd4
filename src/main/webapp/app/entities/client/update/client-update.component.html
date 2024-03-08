@@ -1,17 +1,10 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-client-heading" data-cy="ClientCreateUpdateHeading">Creeare sau editare Client</h2>
+      <h2 id="jhi-client-heading" data-cy="ClientCreateUpdateHeading">{{ title }}</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
-
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id">Id</label>
-            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
 
         <div class="mb-3">
           <label class="form-label" for="field_denumire">Denumire</label>
@@ -126,6 +119,24 @@
           />
         </div>
 
+        @if (editForm.get('deratizare')?.value) {
+          <div class="mb-3">
+            <label class="form-label" for="field_frecventaDeratizare">Frecventa Deratizare</label>
+            <input
+              type="number"
+              class="form-control"
+              name="frecventaDeratizare"
+              id="field_frecventaDeratizare"
+              data-cy="frecventaDeratizare"
+              formControlName="frecventaDeratizare"
+            />
+          </div>
+
+          @if (!editForm.get('frecventaDeratizare')?.value || editForm.get('frecventaDeratizare')?.value?.toString()?.length == 0) {
+            <small class="form-text text-danger">Acest câmp este necesar.</small>
+          }
+        }
+
         <div class="mb-3">
           <label class="form-label" for="field_dezinsectie">Dezinsectie</label>
           <input
@@ -137,6 +148,23 @@
             formControlName="dezinsectie"
           />
         </div>
+        @if (editForm.get('dezinsectie')?.value) {
+          <div class="mb-3">
+            <label class="form-label" for="field_frecventaDezinsectie">Frecventa Dezinsectie</label>
+            <input
+              type="number"
+              class="form-control"
+              name="frecventaDezinsectie"
+              id="field_frecventaDezinsectie"
+              data-cy="frecventaDezinsectie"
+              formControlName="frecventaDezinsectie"
+            />
+          </div>
+
+          @if (!editForm.get('frecventaDezinsectie')?.value || editForm.get('frecventaDezinsectie')?.value?.toString()?.length == 0) {
+            <small class="form-text text-danger">Acest câmp este necesar.</small>
+          }
+        }
 
         <div class="mb-3">
           <label class="form-label" for="field_dezinfectie">Dezinfectie</label>
@@ -149,67 +177,22 @@
             formControlName="dezinfectie"
           />
         </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_frecventaDeratizare">Frecventa Deratizare</label>
-          <input
-            type="number"
-            class="form-control"
-            name="frecventaDeratizare"
-            id="field_frecventaDeratizare"
-            data-cy="frecventaDeratizare"
-            formControlName="frecventaDeratizare"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_frecventaDezinsectie">Frecventa Dezinsectie</label>
-          <input
-            type="number"
-            class="form-control"
-            name="frecventaDezinsectie"
-            id="field_frecventaDezinsectie"
-            data-cy="frecventaDezinsectie"
-            formControlName="frecventaDezinsectie"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_frecventaDezinfectie">Frecventa Dezinfectie</label>
-          <input
-            type="number"
-            class="form-control"
-            name="frecventaDezinfectie"
-            id="field_frecventaDezinfectie"
-            data-cy="frecventaDezinfectie"
-            formControlName="frecventaDezinfectie"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_companie">Companie</label>
-          <select
-            class="form-control"
-            id="field_companie"
-            data-cy="companie"
-            name="companie"
-            formControlName="companie"
-            [compareWith]="compareCompanie"
-          >
-            @if (editForm.get(['companie'])!.value == null) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (companieOption of companiesSharedCollection; track $index) {
-              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
-          <div>
-            @if (editForm.get(['companie'])?.errors?.required) {
-              <small class="form-text text-danger">Acest câmp este necesar.</small>
-            }
+        @if (editForm.get('dezinfectie')?.value) {
+          <div class="mb-3">
+            <label class="form-label" for="field_frecventaDezinfectie">Frecventa Dezinfectie</label>
+            <input
+              type="number"
+              class="form-control"
+              name="frecventaDezinfectie"
+              id="field_frecventaDezinfectie"
+              data-cy="frecventaDezinfectie"
+              formControlName="frecventaDezinfectie"
+            />
           </div>
+
+          @if (!editForm.get('frecventaDezinfectie')?.value || editForm.get('frecventaDezinfectie')?.value?.toString()?.length == 0) {
+            <small class="form-text text-danger">Acest câmp este necesar.</small>
+          }
         }
 
         <div class="mb-3">
@@ -224,7 +207,7 @@
           >
             <option [ngValue]="null"></option>
             @for (categorieClientOption of categorieClientsSharedCollection; track $index) {
-              <option [ngValue]="categorieClientOption">{{ categorieClientOption.id }}</option>
+              <option [ngValue]="categorieClientOption">{{ categorieClientOption.nume }}</option>
             }
           </select>
         </div>

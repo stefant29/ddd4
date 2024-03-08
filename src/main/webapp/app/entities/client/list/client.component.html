@@ -29,7 +29,7 @@
   <p-table
     [value]="clients"
     [lazy]="true"
-    (onLazyLoad)="loadCustomers($event)"
+    (onLazyLoad)="loadData($event)"
     dataKey="id"
     editMode="row"
     [tableStyle]="{ 'min-width': '50rem' }"

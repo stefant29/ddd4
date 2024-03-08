@@ -30,6 +30,8 @@ export class ClientUpdateComponent implements OnInit {
 
   editForm: ClientFormGroup = this.clientFormService.createClientFormGroup();
 
+  title: String = 'Creare client nou';
+
   constructor(
     protected clientService: ClientService,
     protected clientFormService: ClientFormService,
@@ -47,6 +49,7 @@ export class ClientUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ client }) => {
       this.client = client;
       if (client) {
+        this.title = `Actualizare client: ${client.denumire}`;
         this.updateForm(client);
       }
 

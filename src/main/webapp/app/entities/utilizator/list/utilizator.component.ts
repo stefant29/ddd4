@@ -106,7 +106,7 @@ export class UtilizatorComponent implements OnInit {
     alert('edit cancel');
   }
 
-  loadCustomers(event?: TableLazyLoadEvent) {
+  loadData(event?: TableLazyLoadEvent) {
     console.log('event S: ', event);
 
     this.loading = true;
