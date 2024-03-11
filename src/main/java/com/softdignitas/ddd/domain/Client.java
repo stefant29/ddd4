@@ -1,5 +1,6 @@
 package com.softdignitas.ddd.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -79,7 +80,7 @@ public class Client implements Serializable {
     private Companie companie;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "clients" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "clients", "companie" }, allowSetters = true)
     private CategorieClient categorie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

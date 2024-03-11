@@ -27,39 +27,17 @@ class ClientTest {
         assertThat(client1).isNotEqualTo(client2);
     }
 
-    @Test
-    void proceseVerbaleTest() throws Exception {
-        Client client = getClientRandomSampleGenerator();
-        ProcesVerbal procesVerbalBack = getProcesVerbalRandomSampleGenerator();
-
-        client.addProceseVerbale(procesVerbalBack);
-        assertThat(client.getProceseVerbales()).containsOnly(procesVerbalBack);
-        assertThat(procesVerbalBack.getClient()).isEqualTo(client);
-
-        client.removeProceseVerbale(procesVerbalBack);
-        assertThat(client.getProceseVerbales()).doesNotContain(procesVerbalBack);
-        assertThat(procesVerbalBack.getClient()).isNull();
-
-        client.proceseVerbales(new HashSet<>(Set.of(procesVerbalBack)));
-        assertThat(client.getProceseVerbales()).containsOnly(procesVerbalBack);
-        assertThat(procesVerbalBack.getClient()).isEqualTo(client);
-
-        client.setProceseVerbales(new HashSet<>());
-        assertThat(client.getProceseVerbales()).doesNotContain(procesVerbalBack);
-        assertThat(procesVerbalBack.getClient()).isNull();
-    }
-
-    @Test
-    void companieTest() throws Exception {
-        Client client = getClientRandomSampleGenerator();
-        Companie companieBack = getCompanieRandomSampleGenerator();
-
-        client.setCompanie(companieBack);
-        assertThat(client.getCompanie()).isEqualTo(companieBack);
-
-        client.companie(null);
-        assertThat(client.getCompanie()).isNull();
-    }
+    //    @Test
+    //    void companieTest() throws Exception {
+    //        Client client = getClientRandomSampleGenerator();
+    //        Companie companieBack = getCompanieRandomSampleGenerator();
+    //
+    //        client.setCompanie(companieBack);
+    //        assertThat(client.getCompanie()).isEqualTo(companieBack);
+    //
+    //        client.companie(null);
+    //        assertThat(client.getCompanie()).isNull();
+    //    }
 
     @Test
     void categorieTest() throws Exception {

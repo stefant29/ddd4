@@ -2,6 +2,7 @@ package com.softdignitas.ddd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +28,11 @@ public class CategorieClient implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "categorie")
     @JsonIgnoreProperties(value = { "proceseVerbales", "companie", "categorie" }, allowSetters = true)
     private Set<Client> clients = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "utilizatoris", "clientis", "materiales", "proceseVerbales", "categorieClients" }, allowSetters = true)
+    private Companie companie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -87,7 +93,13 @@ public class CategorieClient implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public Companie getCompanie() {
+        return companie;
+    }
+
+    public void setCompanie(Companie companie) {
+        this.companie = companie;
+    }
 
     @Override
     public boolean equals(Object o) {

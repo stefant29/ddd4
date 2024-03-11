@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CategorieClientRepository extends JpaRepository<CategorieClient, String> {}
+public interface CategorieClientRepository extends DDDRepository<CategorieClient, String> {}

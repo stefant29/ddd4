@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/proces-verbals")
 @Transactional
-public class ProcesVerbalResource {
+public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
 
     private final Logger log = LoggerFactory.getLogger(ProcesVerbalResource.class);
 
@@ -38,6 +37,8 @@ public class ProcesVerbalResource {
 
     public ProcesVerbalResource(ProcesVerbalRepository procesVerbalRepository) {
         this.procesVerbalRepository = procesVerbalRepository;
+
+        super.repository = procesVerbalRepository;
     }
 
     /**
@@ -164,17 +165,6 @@ public class ProcesVerbalResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, procesVerbal.getId())
         );
-    }
-
-    /**
-     * {@code GET  /proces-verbals} : get all the procesVerbals.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of procesVerbals in body.
-     */
-    @GetMapping("")
-    public List<ProcesVerbal> getAllProcesVerbals() {
-        log.debug("REST request to get all ProcesVerbals");
-        return procesVerbalRepository.findAll();
     }
 
     /**

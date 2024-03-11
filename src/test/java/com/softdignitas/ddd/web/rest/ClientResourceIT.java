@@ -107,16 +107,16 @@ class ClientResourceIT {
             .frecventaDeratizare(DEFAULT_FRECVENTA_DERATIZARE)
             .frecventaDezinsectie(DEFAULT_FRECVENTA_DEZINSECTIE)
             .frecventaDezinfectie(DEFAULT_FRECVENTA_DEZINFECTIE);
-        // Add required entity
-        Companie companie;
-        if (TestUtil.findAll(em, Companie.class).isEmpty()) {
-            companie = CompanieResourceIT.createEntity(em);
-            em.persist(companie);
-            em.flush();
-        } else {
-            companie = TestUtil.findAll(em, Companie.class).get(0);
-        }
-        client.setCompanie(companie);
+        //        // Add required entity
+        //        Companie companie;
+        //        if (TestUtil.findAll(em, Companie.class).isEmpty()) {
+        //            companie = CompanieResourceIT.createEntity(em);
+        //            em.persist(companie);
+        //            em.flush();
+        //        } else {
+        //            companie = TestUtil.findAll(em, Companie.class).get(0);
+        //        }
+        //        client.setCompanie(companie);
         return client;
     }
 
@@ -142,16 +142,16 @@ class ClientResourceIT {
             .frecventaDeratizare(UPDATED_FRECVENTA_DERATIZARE)
             .frecventaDezinsectie(UPDATED_FRECVENTA_DEZINSECTIE)
             .frecventaDezinfectie(UPDATED_FRECVENTA_DEZINFECTIE);
-        // Add required entity
-        Companie companie;
-        if (TestUtil.findAll(em, Companie.class).isEmpty()) {
-            companie = CompanieResourceIT.createUpdatedEntity(em);
-            em.persist(companie);
-            em.flush();
-        } else {
-            companie = TestUtil.findAll(em, Companie.class).get(0);
-        }
-        client.setCompanie(companie);
+        //        // Add required entity
+        //        Companie companie;
+        //        if (TestUtil.findAll(em, Companie.class).isEmpty()) {
+        //            companie = CompanieResourceIT.createUpdatedEntity(em);
+        //            em.persist(companie);
+        //            em.flush();
+        //        } else {
+        //            companie = TestUtil.findAll(em, Companie.class).get(0);
+        //        }
+        //        client.setCompanie(companie);
         return client;
     }
 

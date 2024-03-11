@@ -49,7 +49,7 @@ public class Utilizator implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "utilizatoris", "clientis", "materiales", "proceseVerbales" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "utilizatoris", "clientis", "materiales", "proceseVerbales", "categorieClients" }, allowSetters = true)
     private Companie companie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

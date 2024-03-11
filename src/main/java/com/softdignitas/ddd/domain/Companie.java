@@ -25,6 +25,10 @@ public class Companie implements Serializable {
     private String nume;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "companie")
+    @JsonIgnoreProperties(value = { "clients" }, allowSetters = true)
+    private Set<CategorieClient> categorieClients = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "companie")
     @JsonIgnoreProperties(value = { "user", "proceseVerbales", "companie" }, allowSetters = true)
     private Set<Utilizator> utilizatoris = new HashSet<>();
 
@@ -190,6 +194,14 @@ public class Companie implements Serializable {
         this.proceseVerbales.remove(procesVerbal);
         procesVerbal.setCompanie(null);
         return this;
+    }
+
+    public Set<CategorieClient> getCategorieClients() {
+        return categorieClients;
+    }
+
+    public void setCategorieClients(Set<CategorieClient> categorieClients) {
+        this.categorieClients = categorieClients;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

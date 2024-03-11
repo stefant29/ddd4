@@ -23,7 +23,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/categorie-clients")
 @Transactional
-public class CategorieClientResource {
+public class CategorieClientResource extends DDDEntitateResource<CategorieClient> {
 
     private final Logger log = LoggerFactory.getLogger(CategorieClientResource.class);
 
@@ -36,6 +36,8 @@ public class CategorieClientResource {
 
     public CategorieClientResource(CategorieClientRepository categorieClientRepository) {
         this.categorieClientRepository = categorieClientRepository;
+
+        super.repository = categorieClientRepository;
     }
 
     /**
@@ -135,17 +137,6 @@ public class CategorieClientResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, categorieClient.getId())
         );
-    }
-
-    /**
-     * {@code GET  /categorie-clients} : get all the categorieClients.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categorieClients in body.
-     */
-    @GetMapping("")
-    public List<CategorieClient> getAllCategorieClients() {
-        log.debug("REST request to get all CategorieClients");
-        return categorieClientRepository.findAll();
     }
 
     /**
