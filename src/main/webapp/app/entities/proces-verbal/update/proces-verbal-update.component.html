@@ -6,13 +6,6 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id">Id</label>
-            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
-
         <div class="mb-3">
           <label class="form-label" for="field_data">Data</label>
           <div class="input-group">
@@ -146,32 +139,6 @@
             formControlName="garantieDeratizare"
           />
         </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_companie">Companie</label>
-          <select
-            class="form-control"
-            id="field_companie"
-            data-cy="companie"
-            name="companie"
-            formControlName="companie"
-            [compareWith]="compareCompanie"
-          >
-            @if (editForm.get(['companie'])!.value == null) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (companieOption of companiesSharedCollection; track $index) {
-              <option [ngValue]="companieOption">{{ companieOption.id }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
-          <div>
-            @if (editForm.get(['companie'])?.errors?.required) {
-              <small class="form-text text-danger">Acest câmp este necesar.</small>
-            }
-          </div>
-        }
 
         <div class="mb-3">
           <label class="form-label" for="field_client">Client</label>

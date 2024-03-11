@@ -77,7 +77,7 @@
               <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.client" />
             </ng-template>
             <ng-template pTemplate="output">
-              {{ procesVerbal.client }}
+              {{ procesVerbal.client.denumire }}
             </ng-template>
           </p-cellEditor>
         </td>
@@ -110,7 +110,8 @@
               <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.operator" />
             </ng-template>
             <ng-template pTemplate="output">
-              {{ procesVerbal.operator }}
+              {{ procesVerbal.operator.nume }}
+              {{ procesVerbal.operator.prenume }}
             </ng-template>
           </p-cellEditor>
         </td>

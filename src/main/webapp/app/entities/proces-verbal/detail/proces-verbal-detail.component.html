@@ -11,10 +11,6 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Id</span></dt>
-          <dd>
-            <span>{{ procesVerbal.id }}</span>
-          </dd>
           <dt><span>Data</span></dt>
           <dd>
             <span>{{ procesVerbal.data | formatMediumDate }}</span>
@@ -55,19 +51,11 @@
           <dd>
             <span>{{ procesVerbal.garantieDeratizare }}</span>
           </dd>
-          <dt><span>Companie</span></dt>
-          <dd>
-            @if (procesVerbal.companie) {
-              <div>
-                <a [routerLink]="['/companie', procesVerbal.companie.id, 'view']">{{ procesVerbal.companie.id }}</a>
-              </div>
-            }
-          </dd>
           <dt><span>Client</span></dt>
           <dd>
             @if (procesVerbal.client) {
               <div>
-                <a [routerLink]="['/client', procesVerbal.client.id, 'view']">{{ procesVerbal.client.id }}</a>
+                <a [routerLink]="['/client', procesVerbal.client.id, 'view']">{{ procesVerbal.client.denumire }}</a>
               </div>
             }
           </dd>
@@ -75,7 +63,9 @@
           <dd>
             @if (procesVerbal.operator) {
               <div>
-                <a [routerLink]="['/utilizator', procesVerbal.operator.id, 'view']">{{ procesVerbal.operator.id }}</a>
+                <a [routerLink]="['/utilizator', procesVerbal.operator.id, 'view']"
+                  >{{ procesVerbal.operator.nume }} {{ procesVerbal.operator.prenume }}</a
+                >
               </div>
             }
           </dd>
