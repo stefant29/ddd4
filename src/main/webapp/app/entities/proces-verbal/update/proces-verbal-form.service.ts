@@ -30,6 +30,7 @@ type NewProcesVerbalFormRawValue = FormValueOf<NewProcesVerbal>;
 type ProcesVerbalFormDefaults = Pick<NewProcesVerbal, 'id' | 'ora' | 'garantieDezinsectie' | 'garantieDeratizare'>;
 
 type ProcesVerbalFormGroupContent = {
+  id: FormControl<ProcesVerbalFormRawValue['id'] | NewProcesVerbal['id']>;
   ora: FormControl<ProcesVerbalFormRawValue['ora']>;
   numarProcesVerbal: FormControl<ProcesVerbalFormRawValue['numarProcesVerbal']>;
   reprezentant: FormControl<ProcesVerbalFormRawValue['reprezentant']>;
@@ -53,6 +54,7 @@ export class ProcesVerbalFormService {
       ...procesVerbal,
     });
     return new FormGroup<ProcesVerbalFormGroupContent>({
+      id: new FormControl({ value: procesVerbalRawValue.id, disabled: true }),
       ora: new FormControl(procesVerbalRawValue.ora, {
         validators: [Validators.required],
       }),

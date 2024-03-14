@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.UuidGenerator;
 
 /**
  * A ProcesVerbal.
@@ -20,7 +21,7 @@ public class ProcesVerbal implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
     @Column(name = "id")
     private String id;
 

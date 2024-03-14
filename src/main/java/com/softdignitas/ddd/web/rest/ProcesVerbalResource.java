@@ -2,6 +2,8 @@ package com.softdignitas.ddd.web.rest;
 
 import com.softdignitas.ddd.domain.ProcesVerbal;
 import com.softdignitas.ddd.repository.ProcesVerbalRepository;
+import com.softdignitas.ddd.service.dto.ProcesVerbalDTO;
+import com.softdignitas.ddd.service.mapper.ProcesVerbalMapper;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
 import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
 import jakarta.persistence.criteria.Predicate;
@@ -9,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,16 +53,20 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
     /**
      * {@code POST  /proces-verbals} : Create a new procesVerbal.
      *
-     * @param procesVerbal the procesVerbal to create.
+     * @param procesVerbalDTO the procesVerbal to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new procesVerbal, or with status {@code 400 (Bad Request)} if the procesVerbal has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<ProcesVerbal> createProcesVerbal(@Valid @RequestBody ProcesVerbal procesVerbal) throws URISyntaxException {
-        log.debug("REST request to save ProcesVerbal : {}", procesVerbal);
-        if (procesVerbal.getId() != null) {
-            throw new BadRequestAlertException("A new procesVerbal cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+    public ResponseEntity<ProcesVerbal> createProcesVerbal(@Valid @RequestBody ProcesVerbalDTO procesVerbalDTO) throws URISyntaxException {
+        log.debug("REST request to save ProcesVerbal : {}", procesVerbalDTO);
+
+        ProcesVerbal procesVerbal = ProcesVerbalMapper.toEntity(procesVerbalDTO);
+
+        final var companie = getCompanie();
+        procesVerbal.setCompanie(companie);
+        procesVerbal.setData(procesVerbalDTO.ora().atZone(ZoneId.systemDefault()).toLocalDate());
+
         ProcesVerbal result = procesVerbalRepository.save(procesVerbal);
         return ResponseEntity
             .created(new URI("/api/proces-verbals/" + result.getId()))
@@ -71,7 +78,7 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
      * {@code PUT  /proces-verbals/:id} : Updates an existing procesVerbal.
      *
      * @param id the id of the procesVerbal to save.
-     * @param procesVerbal the procesVerbal to update.
+     * @param procesVerbalDTO the procesVerbal to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated procesVerbal,
      * or with status {@code 400 (Bad Request)} if the procesVerbal is not valid,
      * or with status {@code 500 (Internal Server Error)} if the procesVerbal couldn't be updated.
@@ -80,19 +87,25 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
     @PutMapping("/{id}")
     public ResponseEntity<ProcesVerbal> updateProcesVerbal(
         @PathVariable(value = "id", required = false) final String id,
-        @Valid @RequestBody ProcesVerbal procesVerbal
+        @Valid @RequestBody ProcesVerbalDTO procesVerbalDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update ProcesVerbal : {}, {}", id, procesVerbal);
-        if (procesVerbal.getId() == null) {
+        log.debug("REST request to update ProcesVerbal : {}, {}", id, procesVerbalDTO);
+        if (procesVerbalDTO.id() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, procesVerbal.getId())) {
+        if (!Objects.equals(id, procesVerbalDTO.id())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
         if (!procesVerbalRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
+        ProcesVerbal procesVerbal = ProcesVerbalMapper.toEntity(procesVerbalDTO);
+
+        final var companie = getCompanie();
+        procesVerbal.setCompanie(companie);
+        procesVerbal.setData(procesVerbalDTO.ora().atZone(ZoneId.systemDefault()).toLocalDate());
 
         ProcesVerbal result = procesVerbalRepository.save(procesVerbal);
         return ResponseEntity

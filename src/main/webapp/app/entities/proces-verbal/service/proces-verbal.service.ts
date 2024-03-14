@@ -48,6 +48,8 @@ export class ProcesVerbalService {
   }
 
   create(procesVerbal: NewProcesVerbal): Observable<EntityResponseType> {
+    console.log('CREATE POST');
+
     const copy = this.convertDateFromClient(procesVerbal);
     return this.http
       .post<RestProcesVerbal>(this.resourceUrl, copy, { observe: 'response' })

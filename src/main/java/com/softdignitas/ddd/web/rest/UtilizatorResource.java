@@ -81,16 +81,10 @@ public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
         utilizatorDTO.setUser(savedUser);
 
         Utilizator utilizator = userMapper.fromUtilizatorDto(utilizatorDTO);
-        // get current company
 
-        utilizator.companie(
-            SecurityUtils
-                .getCurrentUserLogin()
-                .flatMap(userRepository::findOneByLogin)
-                .flatMap(utilizatorRepository::findOneByUser)
-                .orElseThrow(() -> new RecordNotFoundException("UTILIZATOR", ""))
-                .getCompanie()
-        );
+        final var companie = getCompanie();
+
+        utilizator.setCompanie(companie);
 
         Utilizator result = utilizatorRepository.save(utilizator);
         return ResponseEntity

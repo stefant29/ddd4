@@ -25,6 +25,7 @@ import { ProcesVerbalFormService, ProcesVerbalFormGroup } from './proces-verbal-
 export class ProcesVerbalUpdateComponent implements OnInit {
   isSaving = false;
   procesVerbal: IProcesVerbal | null = null;
+  title = 'Creare Proces Verbal';
 
   companiesSharedCollection: ICompanie[] = [];
   clientsSharedCollection: IClient[] = [];
@@ -48,6 +49,7 @@ export class ProcesVerbalUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ procesVerbal }) => {
       this.procesVerbal = procesVerbal;
       if (procesVerbal) {
+        this.title = 'Editare Proces Verbal';
         this.updateForm(procesVerbal);
       }
 
@@ -62,6 +64,9 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const procesVerbal = this.procesVerbalFormService.getProcesVerbal(this.editForm);
+    console.log('SAVING');
+    console.log(procesVerbal);
+
     if (procesVerbal.id !== null) {
       this.subscribeToSaveResponse(this.procesVerbalService.update(procesVerbal));
     } else {
