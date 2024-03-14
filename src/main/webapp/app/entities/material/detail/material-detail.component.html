@@ -2,7 +2,18 @@
   <div class="col-8">
     @if (material) {
       <div>
-        <h2 data-cy="materialDetailsHeading"><span>Material</span></h2>
+        <h2 data-cy="materialDetailsHeading">
+          <p-button
+            pRipple
+            [rounded]="true"
+            icon="pi pi-arrow-left"
+            type="submit"
+            (click)="previousState()"
+            severity="secondary"
+          ></p-button>
+
+          <span>Material: {{ material.denumire }}</span>
+        </h2>
 
         <hr />
 
@@ -11,9 +22,9 @@
         <jhi-alert></jhi-alert>
 
         <dl class="row-md jh-entity-details">
-          <dt><span>Id</span></dt>
+          <dt><span>Denumire</span></dt>
           <dd>
-            <span>{{ material.id }}</span>
+            <span>{{ material.denumire }}</span>
           </dd>
           <dt><span>Procedura</span></dt>
           <dd>
@@ -22,10 +33,6 @@
           <dt><span>Factura</span></dt>
           <dd>
             <span>{{ material.factura }}</span>
-          </dd>
-          <dt><span>Denumire</span></dt>
-          <dd>
-            <span>{{ material.denumire }}</span>
           </dd>
           <dt><span>Lot</span></dt>
           <dd>
@@ -63,19 +70,13 @@
           <dd>
             @if (material.companie) {
               <div>
-                <a [routerLink]="['/companie', material.companie.id, 'view']">{{ material.companie.id }}</a>
+                <a [routerLink]="['/companie', material.companie.id, 'view']">{{ material.companie.nume }}</a>
               </div>
             }
           </dd>
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
-        </button>
-
-        <button type="button" [routerLink]="['/material', material.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
-        </button>
+        <p-button pRipple label="Editare" icon="pi pi-pencil" type="submit" [routerLink]="['/material', material.id, 'edit']"></p-button>
       </div>
     }
   </div>

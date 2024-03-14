@@ -1,17 +1,12 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-categorie-client-heading" data-cy="CategorieClientCreateUpdateHeading">Creeare sau editare Categorie Client</h2>
+      <h2 id="jhi-categorie-client-heading" data-cy="CategorieClientCreateUpdateHeading">
+        {{ title }}
+      </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
-
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id">Id</label>
-            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
 
         <div class="mb-3">
           <label class="form-label" for="field_nume">Nume</label>

@@ -20,6 +20,7 @@ import { CategorieClientFormService, CategorieClientFormGroup } from './categori
 export class CategorieClientUpdateComponent implements OnInit {
   isSaving = false;
   categorieClient: ICategorieClient | null = null;
+  title: String = 'Creare categorie client noua';
 
   editForm: CategorieClientFormGroup = this.categorieClientFormService.createCategorieClientFormGroup();
 
@@ -33,6 +34,7 @@ export class CategorieClientUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ categorieClient }) => {
       this.categorieClient = categorieClient;
       if (categorieClient) {
+        this.title = `Actualizare categorie client: ${categorieClient.nume}`;
         this.updateForm(categorieClient);
       }
     });

@@ -1,19 +1,19 @@
 <div>
   <h2 id="page-heading" data-cy="ProcesVerbalHeading">
     <span>Proces Verbals</span>
-
-    <div class="d-flex justify-content-end">
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-proces-verbal"
-        [routerLink]="['/proces-verbal/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span>Creeare un nou Proces Verbal</span>
-      </button>
-    </div>
   </h2>
+
+  <div class="d-flex justify-content-end">
+    <p-button
+      pRipple
+      [rounded]="true"
+      icon="pi pi-plus"
+      type="submit"
+      [routerLink]="['/proces-verbal/new']"
+      severity="secondary"
+      label="Creare Proces Verbal"
+    ></p-button>
+  </div>
 
   <jhi-alert-error></jhi-alert-error>
 

@@ -4,12 +4,13 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { IMaterial } from '../material.model';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
   selector: 'jhi-material-detail',
   templateUrl: './material-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe, ButtonModule],
 })
 export class MaterialDetailComponent {
   @Input() material: IMaterial | null = null;

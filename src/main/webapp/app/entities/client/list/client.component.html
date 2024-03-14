@@ -1,19 +1,19 @@
 <div>
   <h2 id="page-heading" data-cy="ClientHeading">
     <span>Clients</span>
-
-    <div class="d-flex justify-content-end">
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-client"
-        [routerLink]="['/client/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span>Creeare o nouă entitate Client</span>
-      </button>
-    </div>
   </h2>
+
+  <div class="d-flex justify-content-end">
+    <p-button
+      pRipple
+      [rounded]="true"
+      icon="pi pi-plus"
+      type="submit"
+      [routerLink]="['/client/new']"
+      severity="secondary"
+      label="Creare Client"
+    ></p-button>
+  </div>
 
   <jhi-alert-error></jhi-alert-error>
 

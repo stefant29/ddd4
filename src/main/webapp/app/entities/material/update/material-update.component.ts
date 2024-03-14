@@ -24,6 +24,7 @@ export class MaterialUpdateComponent implements OnInit {
   isSaving = false;
   material: IMaterial | null = null;
   proceduraValues = Object.keys(Procedura);
+  title: String = 'Creare material nou';
 
   companiesSharedCollection: ICompanie[] = [];
 
@@ -42,6 +43,7 @@ export class MaterialUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ material }) => {
       this.material = material;
       if (material) {
+        this.title = `Actualizare material: ${material.denumire}`;
         this.updateForm(material);
       }
 

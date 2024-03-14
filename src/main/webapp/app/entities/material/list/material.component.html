@@ -1,19 +1,19 @@
 <div>
   <h2 id="page-heading" data-cy="MaterialHeading">
     <span>Materials</span>
-
-    <div class="d-flex justify-content-end">
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-material"
-        [routerLink]="['/material/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span>Creeare o nouă entitate Material</span>
-      </button>
-    </div>
   </h2>
+
+  <div class="d-flex justify-content-end">
+    <p-button
+      pRipple
+      [rounded]="true"
+      icon="pi pi-plus"
+      type="submit"
+      [routerLink]="['/material/new']"
+      severity="secondary"
+      label="Creare Material"
+    ></p-button>
+  </div>
 
   <jhi-alert-error></jhi-alert-error>
 

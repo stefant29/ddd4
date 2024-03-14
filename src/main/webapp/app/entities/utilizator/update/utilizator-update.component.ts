@@ -27,6 +27,7 @@ export class UtilizatorUpdateComponent implements OnInit {
   isSaving = false;
   utilizator: IUtilizator | null = null;
   functieValues = Object.keys(Functie);
+  title: String = 'Creare utilizator nou';
 
   usersSharedCollection: IUser[] = [];
   companiesSharedCollection: ICompanie[] = [];
@@ -49,6 +50,7 @@ export class UtilizatorUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ utilizator }) => {
       this.utilizator = utilizator;
       if (utilizator) {
+        this.title = `Actualizare utilizator: ${utilizator.nume} ${utilizator.prenume} `;
         this.updateForm(utilizator);
       }
     });

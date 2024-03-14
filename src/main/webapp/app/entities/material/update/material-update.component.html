@@ -1,17 +1,10 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-material-heading" data-cy="MaterialCreateUpdateHeading">Creeare sau editare Material</h2>
+      <h2 id="jhi-material-heading" data-cy="MaterialCreateUpdateHeading">{{ title }}</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
-
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id">Id</label>
-            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
 
         <div class="mb-3">
           <label class="form-label" for="field_procedura">Procedura</label>
@@ -135,32 +128,6 @@
           <label class="form-label" for="field_cantitate">Cantitate</label>
           <input type="number" class="form-control" name="cantitate" id="field_cantitate" data-cy="cantitate" formControlName="cantitate" />
         </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_companie">Companie</label>
-          <select
-            class="form-control"
-            id="field_companie"
-            data-cy="companie"
-            name="companie"
-            formControlName="companie"
-            [compareWith]="compareCompanie"
-          >
-            @if (editForm.get(['companie'])!.value == null) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (companieOption of companiesSharedCollection; track $index) {
-              <option [ngValue]="companieOption">{{ companieOption.nume }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['companie'])!.invalid && (editForm.get(['companie'])!.dirty || editForm.get(['companie'])!.touched)) {
-          <div>
-            @if (editForm.get(['companie'])?.errors?.required) {
-              <small class="form-text text-danger">Acest câmp este necesar.</small>
-            }
-          </div>
-        }
       </div>
 
       <div>

@@ -1,5 +1,7 @@
 package com.softdignitas.ddd.web.rest;
 
+import static org.springframework.data.mapping.Alias.ofNullable;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softdignitas.ddd.domain.Companie;
@@ -11,10 +13,7 @@ import com.softdignitas.ddd.web.rest.errors.RecordNotFoundException;
 import com.softdignitas.ddd.web.rest.lazyload.FilterMetadata;
 import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
 import jakarta.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +56,26 @@ public class DDDEntitateResource<T> {
     }
 
     @GetMapping("")
-    public Page<T> getAll(TableLazyLoadEvent tableLazyLoadEvent) throws JsonProcessingException {
-        Map filters = objectMapper.readValue(tableLazyLoadEvent.getFilters(), Map.class);
+    public Page<T> getAll(TableLazyLoadEvent tableLazyLoadEvent) {
+        Map filters = getFilters(tableLazyLoadEvent);
         Specification<T> filtersSpecification = filterByCompanie(getSpecification(filters));
 
         return repository.findAll(filtersSpecification, getPageable(tableLazyLoadEvent));
+    }
+
+    private Map getFilters(TableLazyLoadEvent tableLazyLoadEvent) {
+        return Optional
+            .ofNullable(tableLazyLoadEvent)
+            .map(TableLazyLoadEvent::getFilters)
+            .map(json -> {
+                try {
+                    return objectMapper.readValue(json, Map.class);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            })
+            .orElse(new HashMap());
     }
 
     private Pageable getPageable(TableLazyLoadEvent tableLazyLoadEvent) {
