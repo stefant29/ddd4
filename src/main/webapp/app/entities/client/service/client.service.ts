@@ -31,6 +31,10 @@ export class ClientService {
     return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
+  getIdNameList(lazyEvent?: TableLazyLoadEvent): Observable<EntityArrayResponseType> {
+    return this.http.get<IClient[]>(`${this.resourceUrl}/id-name-list`, { observe: 'response' });
+  }
+
   create(client: NewClient): Observable<EntityResponseType> {
     return this.http.post<IClient>(this.resourceUrl, client, { observe: 'response' });
   }

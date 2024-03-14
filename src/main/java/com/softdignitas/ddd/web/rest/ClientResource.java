@@ -1,8 +1,10 @@
 package com.softdignitas.ddd.web.rest;
 
 import com.softdignitas.ddd.domain.Client;
+import com.softdignitas.ddd.domain.ProcesVerbal;
 import com.softdignitas.ddd.repository.ClientRepository;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -13,6 +15,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +43,11 @@ public class ClientResource extends DDDEntitateResource<Client> {
         this.clientRepository = clientRepository;
 
         super.repository = clientRepository;
+    }
+
+    @GetMapping("id-name-list")
+    public List getIdNameList() {
+        return clientRepository.findIdAndName();
     }
 
     /**

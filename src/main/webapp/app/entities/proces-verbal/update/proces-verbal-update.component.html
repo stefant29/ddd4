@@ -7,30 +7,6 @@
         <jhi-alert-error></jhi-alert-error>
 
         <div class="mb-3">
-          <label class="form-label" for="field_data">Data</label>
-          <div class="input-group">
-            <input
-              id="field_data"
-              data-cy="data"
-              type="text"
-              class="form-control"
-              name="data"
-              ngbDatepicker
-              #dataDp="ngbDatepicker"
-              formControlName="data"
-            />
-            <button type="button" class="btn btn-secondary" (click)="dataDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
-          </div>
-          @if (editForm.get('data')!.invalid && (editForm.get('data')!.dirty || editForm.get('data')!.touched)) {
-            <div>
-              @if (editForm.get('data')?.errors?.required) {
-                <small class="form-text text-danger">Acest câmp este necesar.</small>
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
           <label class="form-label" for="field_ora">Ora</label>
           <div class="d-flex">
             <input
@@ -154,7 +130,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (clientOption of clientsSharedCollection; track $index) {
-              <option [ngValue]="clientOption">{{ clientOption.id }}</option>
+              <option [ngValue]="clientOption">{{ clientOption.denumire }}</option>
             }
           </select>
         </div>
@@ -180,7 +156,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (utilizatorOption of utilizatorsSharedCollection; track $index) {
-              <option [ngValue]="utilizatorOption">{{ utilizatorOption.id }}</option>
+              <option [ngValue]="utilizatorOption">{{ utilizatorOption.nume }} {{ utilizatorOption.prenume }}</option>
             }
           </select>
         </div>

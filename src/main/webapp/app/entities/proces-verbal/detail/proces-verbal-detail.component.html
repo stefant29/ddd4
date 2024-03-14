@@ -2,7 +2,17 @@
   <div class="col-8">
     @if (procesVerbal) {
       <div>
-        <h2 data-cy="procesVerbalDetailsHeading"><span>Proces Verbal</span></h2>
+        <h2 data-cy="procesVerbalDetailsHeading">
+          <p-button
+            pRipple
+            [rounded]="true"
+            icon="pi pi-arrow-left"
+            type="submit"
+            (click)="previousState()"
+            severity="secondary"
+          ></p-button>
+          <span>Proces Verbal</span>
+        </h2>
 
         <hr />
 
@@ -12,10 +22,6 @@
 
         <dl class="row-md jh-entity-details">
           <dt><span>Data</span></dt>
-          <dd>
-            <span>{{ procesVerbal.data | formatMediumDate }}</span>
-          </dd>
-          <dt><span>Ora</span></dt>
           <dd>
             <span>{{ procesVerbal.ora | formatMediumDatetime }}</span>
           </dd>
@@ -45,11 +51,27 @@
           </dd>
           <dt><span>Garantie Dezinsectie</span></dt>
           <dd>
-            <span>{{ procesVerbal.garantieDezinsectie }}</span>
+            @if (procesVerbal.garantieDezinsectie) {
+              <span>
+                <i class="pi pi-check" style="font-size: 1.5rem"></i>
+              </span>
+            } @else {
+              <span>
+                <i class="pi pi-times" style="font-size: 1.5rem"></i>
+              </span>
+            }
           </dd>
           <dt><span>Garantie Deratizare</span></dt>
           <dd>
-            <span>{{ procesVerbal.garantieDeratizare }}</span>
+            @if (procesVerbal.garantieDeratizare) {
+              <span>
+                <i class="pi pi-check" style="font-size: 1.5rem"></i>
+              </span>
+            } @else {
+              <span>
+                <i class="pi pi-times" style="font-size: 1.5rem"></i>
+              </span>
+            }
           </dd>
           <dt><span>Client</span></dt>
           <dd>
@@ -71,13 +93,13 @@
           </dd>
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Înapoi</span>
-        </button>
-
-        <button type="button" [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editare</span>
-        </button>
+        <p-button
+          pRipple
+          label="Editare"
+          icon="pi pi-pencil"
+          type="submit"
+          [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']"
+        ></p-button>
       </div>
     }
   </div>

@@ -85,6 +85,13 @@ public class Client implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public Client() {}
+
+    public Client(String id, String denumire) {
+        this.id = id;
+        this.denumire = denumire;
+    }
+
     public String getId() {
         return this.id;
     }

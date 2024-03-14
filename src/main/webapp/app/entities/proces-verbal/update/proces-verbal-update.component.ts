@@ -13,7 +13,7 @@ import { IClient } from 'app/entities/client/client.model';
 import { ClientService } from 'app/entities/client/service/client.service';
 import { IUtilizator } from 'app/entities/utilizator/utilizator.model';
 import { UtilizatorService } from 'app/entities/utilizator/service/utilizator.service';
-import { ProcesVerbalService } from '../service/proces-verbal.service';
+import { EntityArrayResponseType, ProcesVerbalService } from '../service/proces-verbal.service';
 import { IProcesVerbal } from '../proces-verbal.model';
 import { ProcesVerbalFormService, ProcesVerbalFormGroup } from './proces-verbal-form.service';
 
@@ -121,11 +121,11 @@ export class ProcesVerbalUpdateComponent implements OnInit {
       )
       .subscribe((companies: ICompanie[]) => (this.companiesSharedCollection = companies));
 
-    this.clientService
-      .query()
-      .pipe(map((res: HttpResponse<IClient[]>) => res.body ?? []))
-      .pipe(map((clients: IClient[]) => this.clientService.addClientToCollectionIfMissing<IClient>(clients, this.procesVerbal?.client)))
-      .subscribe((clients: IClient[]) => (this.clientsSharedCollection = clients));
+    this.clientService.getIdNameList().subscribe({
+      next: (res: HttpResponse<IClient[]>) => {
+        this.clientsSharedCollection = res.body ?? [];
+      },
+    });
 
     this.utilizatorService
       .query()
