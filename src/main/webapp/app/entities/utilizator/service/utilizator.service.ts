@@ -24,6 +24,10 @@ export class UtilizatorService {
     protected applicationConfigService: ApplicationConfigService,
   ) {}
 
+  getIdNumePrenumeList(lazyEvent?: TableLazyLoadEvent): Observable<EntityArrayResponseType> {
+    return this.http.get<IUtilizator[]>(`${this.resourceUrl}/id-nume-prenume-list`, { observe: 'response' });
+  }
+
   getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
     let params = createReuqestFromTableLazyLoadEvent(lazyEvent);
     return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });

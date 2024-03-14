@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -50,6 +51,13 @@ public class UtilizatorResource extends DDDEntitateResource<Utilizator> {
         this.userMapper = userMapper;
 
         super.repository = utilizatorRepository;
+    }
+
+    @GetMapping("id-nume-prenume-list")
+    public List getIdNumePrenumeList() {
+        final var companie = getCompanie();
+
+        return utilizatorRepository.findDistinctAllByCompanie(companie);
     }
 
     /**

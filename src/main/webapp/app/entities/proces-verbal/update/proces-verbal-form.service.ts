@@ -30,8 +30,6 @@ type NewProcesVerbalFormRawValue = FormValueOf<NewProcesVerbal>;
 type ProcesVerbalFormDefaults = Pick<NewProcesVerbal, 'id' | 'ora' | 'garantieDezinsectie' | 'garantieDeratizare'>;
 
 type ProcesVerbalFormGroupContent = {
-  id: FormControl<ProcesVerbalFormRawValue['id'] | NewProcesVerbal['id']>;
-  data: FormControl<ProcesVerbalFormRawValue['data']>;
   ora: FormControl<ProcesVerbalFormRawValue['ora']>;
   numarProcesVerbal: FormControl<ProcesVerbalFormRawValue['numarProcesVerbal']>;
   reprezentant: FormControl<ProcesVerbalFormRawValue['reprezentant']>;
@@ -41,7 +39,6 @@ type ProcesVerbalFormGroupContent = {
   rapelDeratizare: FormControl<ProcesVerbalFormRawValue['rapelDeratizare']>;
   garantieDezinsectie: FormControl<ProcesVerbalFormRawValue['garantieDezinsectie']>;
   garantieDeratizare: FormControl<ProcesVerbalFormRawValue['garantieDeratizare']>;
-  companie: FormControl<ProcesVerbalFormRawValue['companie']>;
   client: FormControl<ProcesVerbalFormRawValue['client']>;
   operator: FormControl<ProcesVerbalFormRawValue['operator']>;
 };
@@ -56,17 +53,9 @@ export class ProcesVerbalFormService {
       ...procesVerbal,
     });
     return new FormGroup<ProcesVerbalFormGroupContent>({
-      id: new FormControl(
-        { value: procesVerbalRawValue.id, disabled: true },
-        {
-          nonNullable: true,
-          validators: [Validators.required],
-        },
-      ),
-      data: new FormControl(procesVerbalRawValue.data, {
+      ora: new FormControl(procesVerbalRawValue.ora, {
         validators: [Validators.required],
       }),
-      ora: new FormControl(procesVerbalRawValue.ora),
       numarProcesVerbal: new FormControl(procesVerbalRawValue.numarProcesVerbal, {
         validators: [Validators.required],
       }),
@@ -77,9 +66,6 @@ export class ProcesVerbalFormService {
       rapelDeratizare: new FormControl(procesVerbalRawValue.rapelDeratizare),
       garantieDezinsectie: new FormControl(procesVerbalRawValue.garantieDezinsectie),
       garantieDeratizare: new FormControl(procesVerbalRawValue.garantieDeratizare),
-      companie: new FormControl(procesVerbalRawValue.companie, {
-        validators: [Validators.required],
-      }),
       client: new FormControl(procesVerbalRawValue.client, {
         validators: [Validators.required],
       }),

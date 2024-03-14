@@ -1,8 +1,9 @@
 package com.softdignitas.ddd.repository;
 
 import com.softdignitas.ddd.domain.Client;
+import com.softdignitas.ddd.domain.Companie;
+import com.softdignitas.ddd.service.dto.ClientIdAndDenumire;
 import java.util.List;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,6 +12,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ClientRepository extends DDDRepository<Client, String> {
-    @Query("SELECT new Client(entity.id, entity.denumire) FROM Client entity")
-    List<Client> findIdAndName();
+    List<ClientIdAndDenumire> findDistinctAllByCompanie(Companie companie);
 }

@@ -44,13 +44,17 @@ public class DDDEntitateResource<T> {
         this.objectMapper = new ObjectMapper();
     }
 
-    private Specification<T> filterByCompanie(Specification<T> specification) {
-        final Companie companie = SecurityUtils
+    Companie getCompanie() {
+        return SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .flatMap(utilizatorRepository::findOneByUser)
             .orElseThrow(() -> new RecordNotFoundException("UTILIZATOR", ""))
             .getCompanie();
+    }
+
+    private Specification<T> filterByCompanie(Specification<T> specification) {
+        final var companie = getCompanie();
 
         return specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("companie"), companie));
     }

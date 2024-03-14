@@ -8,12 +8,11 @@ import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ICompanie } from 'app/entities/companie/companie.model';
-import { CompanieService } from 'app/entities/companie/service/companie.service';
 import { IClient } from 'app/entities/client/client.model';
 import { ClientService } from 'app/entities/client/service/client.service';
 import { IUtilizator } from 'app/entities/utilizator/utilizator.model';
 import { UtilizatorService } from 'app/entities/utilizator/service/utilizator.service';
-import { EntityArrayResponseType, ProcesVerbalService } from '../service/proces-verbal.service';
+import { ProcesVerbalService } from '../service/proces-verbal.service';
 import { IProcesVerbal } from '../proces-verbal.model';
 import { ProcesVerbalFormService, ProcesVerbalFormGroup } from './proces-verbal-form.service';
 
@@ -36,13 +35,10 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   constructor(
     protected procesVerbalService: ProcesVerbalService,
     protected procesVerbalFormService: ProcesVerbalFormService,
-    protected companieService: CompanieService,
     protected clientService: ClientService,
     protected utilizatorService: UtilizatorService,
     protected activatedRoute: ActivatedRoute,
   ) {}
-
-  compareCompanie = (o1: ICompanie | null, o2: ICompanie | null): boolean => this.companieService.compareCompanie(o1, o2);
 
   compareClient = (o1: IClient | null, o2: IClient | null): boolean => this.clientService.compareClient(o1, o2);
 
@@ -95,46 +91,19 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   protected updateForm(procesVerbal: IProcesVerbal): void {
     this.procesVerbal = procesVerbal;
     this.procesVerbalFormService.resetForm(this.editForm, procesVerbal);
-
-    this.companiesSharedCollection = this.companieService.addCompanieToCollectionIfMissing<ICompanie>(
-      this.companiesSharedCollection,
-      procesVerbal.companie,
-    );
-    this.clientsSharedCollection = this.clientService.addClientToCollectionIfMissing<IClient>(
-      this.clientsSharedCollection,
-      procesVerbal.client,
-    );
-    this.utilizatorsSharedCollection = this.utilizatorService.addUtilizatorToCollectionIfMissing<IUtilizator>(
-      this.utilizatorsSharedCollection,
-      procesVerbal.operator,
-    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.companieService
-      .query()
-      .pipe(map((res: HttpResponse<ICompanie[]>) => res.body ?? []))
-      .pipe(
-        map((companies: ICompanie[]) =>
-          this.companieService.addCompanieToCollectionIfMissing<ICompanie>(companies, this.procesVerbal?.companie),
-        ),
-      )
-      .subscribe((companies: ICompanie[]) => (this.companiesSharedCollection = companies));
-
-    this.clientService.getIdNameList().subscribe({
+    this.clientService.getIdDenumireList().subscribe({
       next: (res: HttpResponse<IClient[]>) => {
         this.clientsSharedCollection = res.body ?? [];
       },
     });
 
-    this.utilizatorService
-      .query()
-      .pipe(map((res: HttpResponse<IUtilizator[]>) => res.body ?? []))
-      .pipe(
-        map((utilizators: IUtilizator[]) =>
-          this.utilizatorService.addUtilizatorToCollectionIfMissing<IUtilizator>(utilizators, this.procesVerbal?.operator),
-        ),
-      )
-      .subscribe((utilizators: IUtilizator[]) => (this.utilizatorsSharedCollection = utilizators));
+    this.utilizatorService.getIdNumePrenumeList().subscribe({
+      next: (res: HttpResponse<IClient[]>) => {
+        this.utilizatorsSharedCollection = res.body ?? [];
+      },
+    });
   }
 }

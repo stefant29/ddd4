@@ -45,9 +45,11 @@ public class ClientResource extends DDDEntitateResource<Client> {
         super.repository = clientRepository;
     }
 
-    @GetMapping("id-name-list")
-    public List getIdNameList() {
-        return clientRepository.findIdAndName();
+    @GetMapping("id-denumire-list")
+    public List getIdDenumireList() {
+        final var companie = getCompanie();
+
+        return clientRepository.findDistinctAllByCompanie(companie);
     }
 
     /**
