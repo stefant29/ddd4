@@ -171,6 +171,63 @@
         }
       </div>
 
+      <div class="row">
+        <div class="col-md-4 pb-2" style="text-align: center">
+          <p-button
+            icon="pi pi-plus"
+            [rounded]="true"
+            [style]="{ float: 'inline-end', 'margin-top': '-0.5rem' }"
+            (onClick)="addDeratizare()"
+          ></p-button>
+          DERATIZARE
+        </div>
+        <div class="col-md-4" style="text-align: center">DEZINSECTIE</div>
+        <div class="col-md-4" style="text-align: center">DEZINFECTIE</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <p-table [value]="jtMaterialeDeratizari" [tableStyle]="{ width: '100%' }">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Material</th>
+                <th>Cantitate</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-jtMaterialDeratizari let-index="rowIndex" style="width: 100%">
+              <tr>
+                <td>
+                  <p-dropdown
+                    [options]="materialeDeratizari"
+                    [(ngModel)]="jtMaterialDeratizari.produs"
+                    placeholder="Select a City"
+                    [editable]="true"
+                    optionLabel="denumire"
+                    [ngModelOptions]="{ standalone: true }"
+                  ></p-dropdown>
+                </td>
+                <td style="width: 20px">
+                  <p-inputNumber
+                    inputId="integeronly"
+                    [(ngModel)]="jtMaterialDeratizari.cantitate"
+                    [ngModelOptions]="{ standalone: true }"
+                    class="stefan"
+                  >
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-button icon="pi pi-minus" [rounded]="true" (onClick)="deleteDeratizare(index)" severity="danger"></p-button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="col-md-4">+ tabel</div>
+        <div class="col-md-4">+ tabel</div>
+      </div>
+
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Anulare</span>

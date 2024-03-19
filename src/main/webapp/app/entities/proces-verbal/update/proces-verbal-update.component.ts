@@ -15,17 +15,27 @@ import { UtilizatorService } from 'app/entities/utilizator/service/utilizator.se
 import { ProcesVerbalService } from '../service/proces-verbal.service';
 import { IProcesVerbal } from '../proces-verbal.model';
 import { ProcesVerbalFormService, ProcesVerbalFormGroup } from './proces-verbal-form.service';
+import { TableModule } from 'primeng/table';
+import { IJTMaterialProcesVerbal } from 'app/entities/jt-material-proces-verbal/jt-material-proces-verbal.model';
+import { Procedura } from 'app/entities/enumerations/procedura.model';
+import { ButtonModule } from 'primeng/button';
+import { IMaterial } from 'app/entities/material/material.model';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   standalone: true,
   selector: 'jhi-proces-verbal-update',
   templateUrl: './proces-verbal-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule, DropdownModule, InputNumberModule],
 })
 export class ProcesVerbalUpdateComponent implements OnInit {
   isSaving = false;
   procesVerbal: IProcesVerbal | null = null;
   title = 'Creare Proces Verbal';
+
+  materialeDeratizari: Array<IMaterial>;
+  jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal>;
 
   companiesSharedCollection: ICompanie[] = [];
   clientsSharedCollection: IClient[] = [];
@@ -46,6 +56,38 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   compareUtilizator = (o1: IUtilizator | null, o2: IUtilizator | null): boolean => this.utilizatorService.compareUtilizator(o1, o2);
 
   ngOnInit(): void {
+    this.materialeDeratizari = [
+      {
+        id: '1',
+        denumire: 'prod1',
+      },
+      {
+        id: '2',
+        denumire: 'prod2',
+      },
+      {
+        id: '3',
+        denumire: 'prod3',
+      },
+    ];
+
+    this.jtMaterialeDeratizari = [
+      {
+        id: '1',
+        procedura: Procedura.DERATIZARE,
+        cantitate: 10,
+        produs: this.materialeDeratizari[0],
+        procesVerbal: null, // Replace null with actual process verbal object
+      },
+      {
+        id: '2',
+        procedura: Procedura.DERATIZARE,
+        cantitate: 20,
+        produs: this.materialeDeratizari[1],
+        procesVerbal: null, // Replace null with actual process verbal object
+      },
+    ];
+
     this.activatedRoute.data.subscribe(({ procesVerbal }) => {
       this.procesVerbal = procesVerbal;
       if (procesVerbal) {
@@ -110,5 +152,20 @@ export class ProcesVerbalUpdateComponent implements OnInit {
         this.utilizatorsSharedCollection = res.body ?? [];
       },
     });
+  }
+
+  protected addDeratizare() {
+    this.jtMaterialeDeratizari.push({
+      id: '4',
+      procedura: Procedura.DERATIZARE,
+      cantitate: null,
+      produs: null,
+      procesVerbal: null, // Replace null with actual process verbal object
+    });
+  }
+
+  protected deleteDeratizare(index: number) {
+    alert(index);
+    this.jtMaterialeDeratizari.splice(index, 1);
   }
 }
