@@ -22,6 +22,7 @@ import { ButtonModule } from 'primeng/button';
 import { IMaterial } from 'app/entities/material/material.model';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { MaterialService } from 'app/entities/material/service/material.service';
 
 @Component({
   standalone: true,
@@ -34,8 +35,8 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   procesVerbal: IProcesVerbal | null = null;
   title = 'Creare Proces Verbal';
 
-  materialeDeratizari: Array<IMaterial>;
-  jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal>;
+  materialeDeratizari: Array<IMaterial> = [];
+  jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal> = [];
 
   companiesSharedCollection: ICompanie[] = [];
   clientsSharedCollection: IClient[] = [];
@@ -49,6 +50,7 @@ export class ProcesVerbalUpdateComponent implements OnInit {
     protected clientService: ClientService,
     protected utilizatorService: UtilizatorService,
     protected activatedRoute: ActivatedRoute,
+    protected materialService: MaterialService,
   ) {}
 
   compareClient = (o1: IClient | null, o2: IClient | null): boolean => this.clientService.compareClient(o1, o2);
@@ -56,37 +58,28 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   compareUtilizator = (o1: IUtilizator | null, o2: IUtilizator | null): boolean => this.utilizatorService.compareUtilizator(o1, o2);
 
   ngOnInit(): void {
-    this.materialeDeratizari = [
-      {
-        id: '1',
-        denumire: 'prod1',
+    this.materialService.getIdDenumireList('DERATIZARE').subscribe({
+      next: (res: HttpResponse<IMaterial[]>) => {
+        this.materialeDeratizari = res.body ?? [];
       },
-      {
-        id: '2',
-        denumire: 'prod2',
-      },
-      {
-        id: '3',
-        denumire: 'prod3',
-      },
-    ];
+    });
 
-    this.jtMaterialeDeratizari = [
-      {
-        id: '1',
-        procedura: Procedura.DERATIZARE,
-        cantitate: 10,
-        produs: this.materialeDeratizari[0],
-        procesVerbal: null, // Replace null with actual process verbal object
-      },
-      {
-        id: '2',
-        procedura: Procedura.DERATIZARE,
-        cantitate: 20,
-        produs: this.materialeDeratizari[1],
-        procesVerbal: null, // Replace null with actual process verbal object
-      },
-    ];
+    // this.jtMaterialeDeratizari = [
+    //   {
+    //     id: '1',
+    //     procedura: Procedura.DERATIZARE,
+    //     cantitate: 10,
+    //     produs: this.materialeDeratizari[0],
+    //     procesVerbal: null, // Replace null with actual process verbal object
+    //   },
+    //   {
+    //     id: '2',
+    //     procedura: Procedura.DERATIZARE,
+    //     cantitate: 20,
+    //     produs: this.materialeDeratizari[1],
+    //     procesVerbal: null, // Replace null with actual process verbal object
+    //   },
+    // ];
 
     this.activatedRoute.data.subscribe(({ procesVerbal }) => {
       this.procesVerbal = procesVerbal;

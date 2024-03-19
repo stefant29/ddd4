@@ -29,7 +29,6 @@ type MaterialFormGroupContent = {
   metodaAplicare: FormControl<IMaterial['metodaAplicare']>;
   gramaj: FormControl<IMaterial['gramaj']>;
   cantitate: FormControl<IMaterial['cantitate']>;
-  companie: FormControl<IMaterial['companie']>;
 };
 
 export type MaterialFormGroup = FormGroup<MaterialFormGroupContent>;
@@ -42,13 +41,7 @@ export class MaterialFormService {
       ...material,
     };
     return new FormGroup<MaterialFormGroupContent>({
-      id: new FormControl(
-        { value: materialRawValue.id, disabled: true },
-        {
-          nonNullable: true,
-          validators: [Validators.required],
-        },
-      ),
+      id: new FormControl({ value: materialRawValue.id, disabled: true }),
       procedura: new FormControl(materialRawValue.procedura),
       factura: new FormControl(materialRawValue.factura, {
         validators: [Validators.required],
@@ -66,9 +59,6 @@ export class MaterialFormService {
       metodaAplicare: new FormControl(materialRawValue.metodaAplicare),
       gramaj: new FormControl(materialRawValue.gramaj),
       cantitate: new FormControl(materialRawValue.cantitate),
-      companie: new FormControl(materialRawValue.companie, {
-        validators: [Validators.required],
-      }),
     });
   }
 

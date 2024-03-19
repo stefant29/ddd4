@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
@@ -39,6 +39,13 @@ export class MaterialService {
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService,
   ) {}
+
+  getIdDenumireList(procedura: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IMaterial[]>(`${this.resourceUrl}/id-denumire-list`, {
+      params: new HttpParams().set('procedura', procedura),
+      observe: 'response',
+    });
+  }
 
   getList(lazyEvent?: TableLazyLoadEvent): Observable<PageableResponse> {
     let params = createReuqestFromTableLazyLoadEvent(lazyEvent);

@@ -1,12 +1,16 @@
 package com.softdignitas.ddd.web.rest;
 
 import com.softdignitas.ddd.domain.Material;
+import com.softdignitas.ddd.domain.enumeration.Procedura;
 import com.softdignitas.ddd.repository.MaterialRepository;
+import com.softdignitas.ddd.service.dto.MaterialDTO;
+import com.softdignitas.ddd.service.mapper.MaterialMapper;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -41,19 +45,29 @@ public class MaterialResource extends DDDEntitateResource<Material> {
         super.repository = materialRepository;
     }
 
+    @GetMapping("id-denumire-list")
+    public List getIdNumePrenumeList(@RequestParam("procedura") String procedura) {
+        final var companie = getCompanie();
+
+        return materialRepository.findDistinctAllByCompanieAndProcedura(companie, Procedura.valueOf(procedura));
+    }
+
     /**
      * {@code POST  /materials} : Create a new material.
      *
-     * @param material the material to create.
+     * @param materialDTO the material to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new material, or with status {@code 400 (Bad Request)} if the material has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<Material> createMaterial(@Valid @RequestBody Material material) throws URISyntaxException {
-        log.debug("REST request to save Material : {}", material);
-        if (material.getId() != null) {
-            throw new BadRequestAlertException("A new material cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+    public ResponseEntity<Material> createMaterial(@Valid @RequestBody MaterialDTO materialDTO) throws URISyntaxException {
+        log.debug("REST request to save Material : {}", materialDTO);
+
+        Material material = MaterialMapper.toEntity(materialDTO);
+
+        final var companie = getCompanie();
+        material.setCompanie(companie);
+
         Material result = materialRepository.save(material);
         return ResponseEntity
             .created(new URI("/api/materials/" + result.getId()))

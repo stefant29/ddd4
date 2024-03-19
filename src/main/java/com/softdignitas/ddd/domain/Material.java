@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.UuidGenerator;
 
 /**
  * A Material.
@@ -20,7 +21,7 @@ public class Material implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
     @Column(name = "id")
     private String id;
 
