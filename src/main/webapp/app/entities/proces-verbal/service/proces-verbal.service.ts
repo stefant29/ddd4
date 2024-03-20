@@ -48,12 +48,12 @@ export class ProcesVerbalService {
     return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
-  create(procesVerbal: NewProcesVerbal, jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal>): Observable<EntityResponseType> {
+  create(procesVerbal: NewProcesVerbal, jTMaterialProcesVerbals: Array<IJTMaterialProcesVerbal>): Observable<EntityResponseType> {
     console.log('CREATE POST');
 
     const copy = {
       ...this.convertDateFromClient(procesVerbal),
-      jTMaterialProcesVerbals: jtMaterialeDeratizari ?? null,
+      jTMaterialProcesVerbals: jTMaterialProcesVerbals ?? null,
     };
 
     return this.http

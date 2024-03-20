@@ -38,6 +38,12 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   materialeDeratizari: Array<IMaterial> = [];
   jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal> = [];
 
+  materialeDezinsectii: Array<IMaterial> = [];
+  jtMaterialeDezinsectii: Array<IJTMaterialProcesVerbal> = [];
+
+  materialeDezinfectii: Array<IMaterial> = [];
+  jtMaterialeDezinfectii: Array<IJTMaterialProcesVerbal> = [];
+
   companiesSharedCollection: ICompanie[] = [];
   clientsSharedCollection: IClient[] = [];
   utilizatorsSharedCollection: IUtilizator[] = [];
@@ -63,23 +69,16 @@ export class ProcesVerbalUpdateComponent implements OnInit {
         this.materialeDeratizari = res.body ?? [];
       },
     });
-
-    // this.jtMaterialeDeratizari = [
-    //   {
-    //     id: '1',
-    //     procedura: Procedura.DERATIZARE,
-    //     cantitate: 10,
-    //     produs: this.materialeDeratizari[0],
-    //     procesVerbal: null, // Replace null with actual process verbal object
-    //   },
-    //   {
-    //     id: '2',
-    //     procedura: Procedura.DERATIZARE,
-    //     cantitate: 20,
-    //     produs: this.materialeDeratizari[1],
-    //     procesVerbal: null, // Replace null with actual process verbal object
-    //   },
-    // ];
+    this.materialService.getIdDenumireList('DEZINSECTIE').subscribe({
+      next: (res: HttpResponse<IMaterial[]>) => {
+        this.materialeDezinsectii = res.body ?? [];
+      },
+    });
+    this.materialService.getIdDenumireList('DEZINFECTIE').subscribe({
+      next: (res: HttpResponse<IMaterial[]>) => {
+        this.materialeDezinfectii = res.body ?? [];
+      },
+    });
 
     this.activatedRoute.data.subscribe(({ procesVerbal }) => {
       this.procesVerbal = procesVerbal;
@@ -105,7 +104,12 @@ export class ProcesVerbalUpdateComponent implements OnInit {
     if (procesVerbal.id !== null) {
       this.subscribeToSaveResponse(this.procesVerbalService.update(procesVerbal));
     } else {
-      this.subscribeToSaveResponse(this.procesVerbalService.create(procesVerbal, this.jtMaterialeDeratizari));
+      this.subscribeToSaveResponse(
+        this.procesVerbalService.create(
+          procesVerbal,
+          this.jtMaterialeDeratizari.concat(this.jtMaterialeDezinfectii).concat(this.jtMaterialeDezinsectii),
+        ),
+      );
     }
   }
 
@@ -153,12 +157,39 @@ export class ProcesVerbalUpdateComponent implements OnInit {
       procedura: Procedura.DERATIZARE,
       cantitate: null,
       produs: null,
-      procesVerbal: null, // Replace null with actual process verbal object
+      procesVerbal: null,
     });
   }
 
   protected deleteDeratizare(index: number) {
-    alert(index);
     this.jtMaterialeDeratizari.splice(index, 1);
+  }
+
+  protected addDezinsectie() {
+    this.jtMaterialeDezinsectii.push({
+      id: '4',
+      procedura: Procedura.DEZINSECTIE,
+      cantitate: null,
+      produs: null,
+      procesVerbal: null,
+    });
+  }
+
+  protected deleteDezinsectie(index: number) {
+    this.jtMaterialeDezinsectii.splice(index, 1);
+  }
+
+  protected addDezinfectie() {
+    this.jtMaterialeDezinfectii.push({
+      id: '4',
+      procedura: Procedura.DEZINFECTIE,
+      cantitate: null,
+      produs: null,
+      procesVerbal: null,
+    });
+  }
+
+  protected deleteDezinfectie(index: number) {
+    this.jtMaterialeDezinfectii.splice(index, 1);
   }
 }
