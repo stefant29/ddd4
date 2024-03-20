@@ -1,6 +1,8 @@
 package com.softdignitas.ddd.web.rest;
 
+import com.softdignitas.ddd.domain.JTMaterialProcesVerbal;
 import com.softdignitas.ddd.domain.ProcesVerbal;
+import com.softdignitas.ddd.repository.JTMaterialProcesVerbalRepository;
 import com.softdignitas.ddd.repository.ProcesVerbalRepository;
 import com.softdignitas.ddd.service.dto.ProcesVerbalDTO;
 import com.softdignitas.ddd.service.mapper.ProcesVerbalMapper;
@@ -37,9 +39,14 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
     private String applicationName;
 
     private final ProcesVerbalRepository procesVerbalRepository;
+    private final JTMaterialProcesVerbalRepository jtMaterialProcesVerbalRepository;
 
-    public ProcesVerbalResource(ProcesVerbalRepository procesVerbalRepository) {
+    public ProcesVerbalResource(
+        ProcesVerbalRepository procesVerbalRepository,
+        JTMaterialProcesVerbalRepository jtMaterialProcesVerbalRepository
+    ) {
         this.procesVerbalRepository = procesVerbalRepository;
+        this.jtMaterialProcesVerbalRepository = jtMaterialProcesVerbalRepository;
 
         super.repository = procesVerbalRepository;
     }
@@ -62,6 +69,14 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
         procesVerbal.setData(procesVerbalDTO.ora().atZone(ZoneId.systemDefault()).toLocalDate());
 
         ProcesVerbal result = procesVerbalRepository.save(procesVerbal);
+
+        procesVerbalDTO
+            .jTMaterialProcesVerbals()
+            .forEach(jTMaterialProcesVerbal -> {
+                jTMaterialProcesVerbal.setProcesVerbal(result);
+                jtMaterialProcesVerbalRepository.save(jTMaterialProcesVerbal);
+            });
+
         return ResponseEntity
             .created(new URI("/api/proces-verbals/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))

@@ -5,6 +5,7 @@ import com.softdignitas.ddd.domain.enumeration.Procedura;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import org.hibernate.annotations.UuidGenerator;
 
 /**
  * A JTMaterialProcesVerbal.
@@ -17,7 +18,7 @@ public class JTMaterialProcesVerbal implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @UuidGenerator
     @Column(name = "id")
     private String id;
 

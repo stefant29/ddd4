@@ -16,6 +16,7 @@ import { TableLazyLoadEvent } from 'primeng/table';
 import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
 import { PageResponse } from 'app/shared/pageable/page-response';
 import { createReuqestFromTableLazyLoadEvent } from 'app/core/request/request-util';
+import { IJTMaterialProcesVerbal } from 'app/entities/jt-material-proces-verbal/jt-material-proces-verbal.model';
 
 export type PartialUpdateProcesVerbal = Partial<IProcesVerbal> & Pick<IProcesVerbal, 'id'>;
 
@@ -47,10 +48,14 @@ export class ProcesVerbalService {
     return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
-  create(procesVerbal: NewProcesVerbal): Observable<EntityResponseType> {
+  create(procesVerbal: NewProcesVerbal, jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal>): Observable<EntityResponseType> {
     console.log('CREATE POST');
 
-    const copy = this.convertDateFromClient(procesVerbal);
+    const copy = {
+      ...this.convertDateFromClient(procesVerbal),
+      jTMaterialProcesVerbals: jtMaterialeDeratizari ?? null,
+    };
+
     return this.http
       .post<RestProcesVerbal>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map(res => this.convertResponseFromServer(res)));

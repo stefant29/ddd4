@@ -11,6 +11,7 @@ import { IProcesVerbal } from '../proces-verbal.model';
 import { ProcesVerbalService } from '../service/proces-verbal.service';
 import { ToastModule } from 'primeng/toast';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -66,6 +67,7 @@ export class ProcesVerbalComponent implements OnInit {
       alert('No body');
     } else {
       this.procesVerbals = response.body.content ?? [];
+      console.log(this.procesVerbals);
       this.totalRecords = response.body.totalElements;
     }
   }

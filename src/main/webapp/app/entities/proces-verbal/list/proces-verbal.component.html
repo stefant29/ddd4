@@ -34,13 +34,16 @@
     editMode="row"
     [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"
-    [rows]="3"
+    [rows]="10"
     [totalRecords]="totalRecords"
+    rowGroupMode="rowspan"
+    groupRowsBy="client.denumire"
     [loading]="loading"
     [globalFilterFields]="['client', 'reprezentant', 'data', 'operator']"
   >
     <ng-template pTemplate="header">
       <tr>
+        <th></th>
         <th pSortableColumn="client" style="width: 15%">Client <p-sortIcon field="client"></p-sortIcon></th>
         <th pSortableColumn="reprezentant" style="width: 15%">Reprezentant <p-sortIcon field="reprezentant"></p-sortIcon></th>
         <th pSortableColumn="data" style="width: 15%">Data interventiei <p-sortIcon field="data"></p-sortIcon></th>
@@ -51,6 +54,7 @@
         <th style="width: 15%"></th>
       </tr>
       <tr>
+        <th></th>
         <th>
           <p-columnFilter type="text" field="client"></p-columnFilter>
         </th>
@@ -69,17 +73,18 @@
         <th></th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-procesVerbal let-editing="editing" let-ri="rowIndex">
+    <ng-template
+      pTemplate="body"
+      let-procesVerbal
+      let-editing="editing"
+      let-rowIndex="rowIndex"
+      let-rowgroup="rowgroup"
+      let-rowspan="rowspan"
+    >
       <tr [pEditableRow]="procesVerbal">
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.client" />
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ procesVerbal.client.denumire }}
-            </ng-template>
-          </p-cellEditor>
+        <td>{{ rowIndex + 1 }}</td>
+        <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
+          <span class="font-bold ml-2">{{ procesVerbal.client.denumire }}</span>
         </td>
         <td>
           <p-cellEditor>
@@ -153,7 +158,7 @@
               type="button"
               pCancelEditableRow
               icon="pi pi-times"
-              (click)="onRowEditCancel(procesVerbal, ri)"
+              (click)="onRowEditCancel(procesVerbal, rowIndex)"
               class="p-button-rounded p-button-text p-button-danger"
             ></button>
           </div>

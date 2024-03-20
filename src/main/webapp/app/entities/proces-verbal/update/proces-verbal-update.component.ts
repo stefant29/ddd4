@@ -105,7 +105,7 @@ export class ProcesVerbalUpdateComponent implements OnInit {
     if (procesVerbal.id !== null) {
       this.subscribeToSaveResponse(this.procesVerbalService.update(procesVerbal));
     } else {
-      this.subscribeToSaveResponse(this.procesVerbalService.create(procesVerbal));
+      this.subscribeToSaveResponse(this.procesVerbalService.create(procesVerbal, this.jtMaterialeDeratizari));
     }
   }
 
