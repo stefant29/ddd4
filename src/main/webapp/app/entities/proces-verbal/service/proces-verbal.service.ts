@@ -10,7 +10,7 @@ import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IProcesVerbal, NewProcesVerbal } from '../proces-verbal.model';
+import { IProcesVerbal, NewProcesVerbal, ProcesVerbalList } from '../proces-verbal.model';
 
 import { TableLazyLoadEvent } from 'primeng/table';
 import { PageableResponse } from 'app/entities/utilizator/service/utilizator.service';
@@ -48,6 +48,10 @@ export class ProcesVerbalService {
     return this.http.get<PageResponse>(this.resourceUrl, { params: params, observe: 'response' });
   }
 
+  getList2(): Observable<HttpResponse<ProcesVerbalList[]>> {
+    return this.http.get<ProcesVerbalList[]>(this.resourceUrl, { observe: 'response' });
+  }
+
   create(procesVerbal: NewProcesVerbal, jTMaterialProcesVerbals: Array<IJTMaterialProcesVerbal>): Observable<EntityResponseType> {
     console.log('CREATE POST');
 
@@ -61,10 +65,16 @@ export class ProcesVerbalService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  update(procesVerbal: IProcesVerbal): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(procesVerbal);
+  update(procesVerbal: IProcesVerbal, jTMaterialProcesVerbals: Array<IJTMaterialProcesVerbal>): Observable<EntityResponseType> {
+    console.log('CREATE POST');
+
+    const copy = {
+      ...this.convertDateFromClient(procesVerbal),
+      jTMaterialProcesVerbals: jTMaterialProcesVerbals ?? null,
+    };
+
     return this.http
-      .put<RestProcesVerbal>(`${this.resourceUrl}/${this.getProcesVerbalIdentifier(procesVerbal)}`, copy, { observe: 'response' })
+      .put<RestProcesVerbal>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 

@@ -202,4 +202,8 @@ public class Utilizator implements Serializable {
             ", functie='" + getFunctie() + "'" +
             "}";
     }
+
+    public String getNumeIntreg() {
+        return this.nume + " " + this.prenume;
+    }
 }

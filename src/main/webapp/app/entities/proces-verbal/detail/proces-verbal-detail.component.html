@@ -5,6 +5,8 @@
         <h2 data-cy="procesVerbalDetailsHeading">
           <p-button
             pRipple
+            pTooltip="Inapoi"
+            tooltipPosition="left"
             [rounded]="true"
             icon="pi pi-arrow-left"
             type="submit"
@@ -12,6 +14,15 @@
             severity="secondary"
           ></p-button>
           <span>Proces Verbal</span>
+          <p-button
+            pRipple
+            [rounded]="true"
+            pTooltip="Editare"
+            icon="pi pi-pencil"
+            type="submit"
+            [ngStyle]="{ float: 'right' }"
+            [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']"
+          ></p-button>
         </h2>
 
         <hr />
@@ -93,13 +104,78 @@
           </dd>
         </dl>
 
-        <p-button
-          pRipple
-          label="Editare"
-          icon="pi pi-pencil"
-          type="submit"
-          [routerLink]="['/proces-verbal', procesVerbal.id, 'edit']"
-        ></p-button>
+        <div class="row">
+          <div class="col-md-12 pb-2" style="text-align: center">DEZINSECTIE</div>
+        </div>
+
+        <p-table [value]="jtMaterialeDezinsectii" [tableStyle]="{ width: '100%' }" [scrollable]="false">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Material</th>
+              <th>Cantitate</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-jtMaterialDezinsectie let-index="rowIndex" style="width: 100%">
+            <tr>
+              <td>
+                {{ jtMaterialDezinsectie.produs.denumire }}
+              </td>
+              <td style="width: 20px">
+                {{ jtMaterialDezinsectie.cantitate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <hr style="margin-top: 3rem; margin-bottom: 3rem" />
+
+        <div class="row">
+          <div class="col-md-12 pb-2" style="text-align: center">DEZINFECTIE</div>
+        </div>
+
+        <p-table [value]="jtMaterialeDezinfectii" [tableStyle]="{ width: '100%' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Material</th>
+              <th>Cantitate</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-jtMaterialDezinfectie let-index="rowIndex" style="width: 100%">
+            <tr>
+              <td>
+                {{ jtMaterialDezinfectie.produs.denumire }}
+              </td>
+              <td style="width: 20px">
+                {{ jtMaterialDezinfectie.cantitate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+        <hr style="margin-top: 3rem; margin-bottom: 3rem" />
+
+        <div class="row">
+          <div class="col-md-12 pb-2" style="text-align: center">DERATIZARE</div>
+        </div>
+
+        <p-table [value]="jtMaterialeDeratizari" [tableStyle]="{ width: '100%' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Material</th>
+              <th>Cantitate</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-jtMaterialDeratizari let-index="rowIndex" style="width: 100%">
+            <tr>
+              <td>
+                {{ jtMaterialDeratizari.produs.denumire }}
+              </td>
+              <td style="width: 20px">
+                {{ jtMaterialDeratizari.cantitate }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
     }
   </div>

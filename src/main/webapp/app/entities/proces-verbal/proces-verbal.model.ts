@@ -17,9 +17,22 @@ export interface IProcesVerbal {
   garantieDezinsectie?: boolean | null;
   garantieDeratizare?: boolean | null;
   jTMaterialProcesVerbals?: IJTMaterialProcesVerbal[] | null;
+  jtmaterialProcesVerbals?: IJTMaterialProcesVerbal[] | null;
   companie?: ICompanie | null;
   client?: IClient | null;
   operator?: IUtilizator | null;
+}
+
+export interface ProcesVerbalList {
+  id: string;
+  ora?: dayjs.Dayjs | null;
+  numarProcesVerbal?: number | null;
+  reprezentant?: string | null;
+  procedura?: string | null;
+  produs?: string | null;
+  cantitate?: string | null;
+  client?: string | null;
+  operator?: string | null;
 }
 
 export type NewProcesVerbal = Omit<IProcesVerbal, 'id'> & { id: null };

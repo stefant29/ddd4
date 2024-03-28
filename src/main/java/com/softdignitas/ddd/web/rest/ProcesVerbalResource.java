@@ -1,21 +1,31 @@
 package com.softdignitas.ddd.web.rest;
 
+import com.softdignitas.ddd.domain.Companie;
 import com.softdignitas.ddd.domain.JTMaterialProcesVerbal;
 import com.softdignitas.ddd.domain.ProcesVerbal;
 import com.softdignitas.ddd.repository.JTMaterialProcesVerbalRepository;
 import com.softdignitas.ddd.repository.ProcesVerbalRepository;
+import com.softdignitas.ddd.repository.UserRepository;
+import com.softdignitas.ddd.repository.UtilizatorRepository;
+import com.softdignitas.ddd.security.SecurityUtils;
 import com.softdignitas.ddd.service.dto.ProcesVerbalDTO;
+import com.softdignitas.ddd.service.dto.ProcesVerbalListDTO;
 import com.softdignitas.ddd.service.mapper.ProcesVerbalMapper;
 import com.softdignitas.ddd.web.rest.errors.BadRequestAlertException;
+import com.softdignitas.ddd.web.rest.errors.RecordNotFoundException;
+import com.softdignitas.ddd.web.rest.lazyload.TableLazyLoadEvent;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +39,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/proces-verbals")
 @Transactional
-public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
+public class ProcesVerbalResource {
 
     private final Logger log = LoggerFactory.getLogger(ProcesVerbalResource.class);
 
@@ -37,6 +47,12 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+
+    @Autowired
+    private UtilizatorRepository utilizatorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final ProcesVerbalRepository procesVerbalRepository;
     private final JTMaterialProcesVerbalRepository jtMaterialProcesVerbalRepository;
@@ -47,8 +63,64 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
     ) {
         this.procesVerbalRepository = procesVerbalRepository;
         this.jtMaterialProcesVerbalRepository = jtMaterialProcesVerbalRepository;
+        //        super.repository = procesVerbalRepository;
+    }
 
-        super.repository = procesVerbalRepository;
+    @GetMapping("")
+    public List<ProcesVerbalListDTO> getAll(TableLazyLoadEvent tableLazyLoadEvent) {
+        // TODO solve filters
+        //        Map filters = getFilters(tableLazyLoadEvent);
+        //        Specification<ProcesVerbal> filtersSpecification = filterByCompanie(getSpecification(new HashMap<>()));
+        Companie companie = getCompanie();
+
+        final var proceseVerbale = procesVerbalRepository.findAllByCompanie(companie);
+
+        List<ProcesVerbalListDTO> proceseVerbaleDTO = new ArrayList<>();
+
+        for (final ProcesVerbal procesVerbal : proceseVerbale) {
+            if (procesVerbal.getJTMaterialProcesVerbals().isEmpty()) {
+                proceseVerbaleDTO.add(
+                    new ProcesVerbalListDTO(
+                        procesVerbal.getId(),
+                        procesVerbal.getOra(),
+                        procesVerbal.getNumarProcesVerbal(),
+                        procesVerbal.getReprezentant(),
+                        null,
+                        null,
+                        null,
+                        procesVerbal.getOperator().getNumeIntreg(),
+                        procesVerbal.getClient().getDenumire()
+                    )
+                );
+            }
+
+            for (final JTMaterialProcesVerbal jtMaterialProcesVerbal : procesVerbal.getJTMaterialProcesVerbals()) {
+                proceseVerbaleDTO.add(
+                    new ProcesVerbalListDTO(
+                        procesVerbal.getId(),
+                        procesVerbal.getOra(),
+                        procesVerbal.getNumarProcesVerbal(),
+                        procesVerbal.getReprezentant(),
+                        jtMaterialProcesVerbal.getProdus().getProcedura().name(),
+                        jtMaterialProcesVerbal.getProdus().getDenumire(),
+                        jtMaterialProcesVerbal.getCantitate(),
+                        procesVerbal.getOperator().getNumeIntreg(),
+                        procesVerbal.getClient().getDenumire()
+                    )
+                );
+            }
+        }
+
+        return proceseVerbaleDTO;
+    }
+
+    private Companie getCompanie() {
+        return SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .flatMap(utilizatorRepository::findOneByUser)
+            .orElseThrow(() -> new RecordNotFoundException("UTILIZATOR", ""))
+            .getCompanie();
     }
 
     /**
@@ -72,9 +144,9 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
 
         procesVerbalDTO
             .jTMaterialProcesVerbals()
-            .forEach(jTMaterialProcesVerbal -> {
-                jTMaterialProcesVerbal.setProcesVerbal(result);
-                jtMaterialProcesVerbalRepository.save(jTMaterialProcesVerbal);
+            .forEach(jtMaterialProcesVerbal -> {
+                jtMaterialProcesVerbal.setProcesVerbal(result);
+                jtMaterialProcesVerbalRepository.save(jtMaterialProcesVerbal);
             });
 
         return ResponseEntity
@@ -86,37 +158,60 @@ public class ProcesVerbalResource extends DDDEntitateResource<ProcesVerbal> {
     /**
      * {@code PUT  /proces-verbals/:id} : Updates an existing procesVerbal.
      *
-     * @param id the id of the procesVerbal to save.
      * @param procesVerbalDTO the procesVerbal to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated procesVerbal,
      * or with status {@code 400 (Bad Request)} if the procesVerbal is not valid,
      * or with status {@code 500 (Internal Server Error)} if the procesVerbal couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<ProcesVerbal> updateProcesVerbal(
-        @PathVariable(value = "id", required = false) final String id,
-        @Valid @RequestBody ProcesVerbalDTO procesVerbalDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to update ProcesVerbal : {}, {}", id, procesVerbalDTO);
+    @PutMapping
+    @Transactional
+    public ResponseEntity<ProcesVerbal> updateProcesVerbal(@Valid @RequestBody ProcesVerbalDTO procesVerbalDTO) {
+        log.debug("REST request to update ProcesVerbal : {}, {}", procesVerbalDTO.id(), procesVerbalDTO);
         if (procesVerbalDTO.id() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, procesVerbalDTO.id())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
 
-        if (!procesVerbalRepository.existsById(id)) {
+        if (!procesVerbalRepository.existsById(procesVerbalDTO.id())) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+        //
+        //        ProcesVerbal procesVerbal = ProcesVerbalMapper.updateEntity(
+        //            procesVerbalRepository.findById(procesVerbalDTO.id()).orElseThrow(() -> new RecordNotFoundException("ProcesVerbal", procesVerbalDTO.id())),
+        //            procesVerbalDTO);
+        //        procesVerbal.setData(procesVerbalDTO.ora().atZone(ZoneId.systemDefault()).toLocalDate());
 
-        ProcesVerbal procesVerbal = ProcesVerbalMapper.toEntity(procesVerbalDTO);
-
-        final var companie = getCompanie();
-        procesVerbal.setCompanie(companie);
+        ProcesVerbal procesVerbal = procesVerbalRepository
+            .findById(procesVerbalDTO.id())
+            .orElseThrow(() -> new RecordNotFoundException("ProcesVerbal", procesVerbalDTO.id()));
+        procesVerbal.ora(procesVerbalDTO.ora());
         procesVerbal.setData(procesVerbalDTO.ora().atZone(ZoneId.systemDefault()).toLocalDate());
 
         ProcesVerbal result = procesVerbalRepository.save(procesVerbal);
+
+        // TODO: update JTMaterialProcesVerbal:
+        //   -> delete the ones that are not present anymore
+        //   -> update the ones that are present
+        //   -> add the new ones
+
+        procesVerbal
+            .getJTMaterialProcesVerbals()
+            .forEach(jtMaterialProcesVerbal -> {
+                if (!procesVerbalDTO.jTMaterialProcesVerbals().contains(jtMaterialProcesVerbal)) {
+                    jtMaterialProcesVerbalRepository.delete(jtMaterialProcesVerbal);
+                }
+            });
+
+        procesVerbalDTO
+            .jTMaterialProcesVerbals()
+            .forEach(jtMaterialProcesVerbal -> {
+                if (!procesVerbal.getJTMaterialProcesVerbals().contains(jtMaterialProcesVerbal)) {
+                    jtMaterialProcesVerbal.setProcesVerbal(procesVerbal);
+                    jtMaterialProcesVerbalRepository.save(jtMaterialProcesVerbal);
+                }
+            });
+
+        //        jtMaterialProcesVerbalRepository.saveAll(procesVerbalDTO.jTMaterialProcesVerbals());
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, procesVerbal.getId()))

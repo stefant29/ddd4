@@ -37,7 +37,7 @@
     [rows]="10"
     [totalRecords]="totalRecords"
     rowGroupMode="rowspan"
-    groupRowsBy="client.denumire"
+    groupRowsBy="client"
     [loading]="loading"
     [globalFilterFields]="['client', 'reprezentant', 'data', 'operator']"
   >
@@ -45,6 +45,7 @@
       <tr>
         <th></th>
         <th pSortableColumn="client" style="width: 15%">Client <p-sortIcon field="client"></p-sortIcon></th>
+        <th>Nr.</th>
         <th pSortableColumn="reprezentant" style="width: 15%">Reprezentant <p-sortIcon field="reprezentant"></p-sortIcon></th>
         <th pSortableColumn="data" style="width: 15%">Data interventiei <p-sortIcon field="data"></p-sortIcon></th>
         <th style="width: 10%">Tip procedura</th>
@@ -58,6 +59,7 @@
         <th>
           <p-columnFilter type="text" field="client"></p-columnFilter>
         </th>
+        <th></th>
         <th>
           <p-columnFilter type="text" field="reprezentant"></p-columnFilter>
         </th>
@@ -84,8 +86,9 @@
       <tr [pEditableRow]="procesVerbal">
         <td>{{ rowIndex + 1 }}</td>
         <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
-          <span class="font-bold ml-2">{{ procesVerbal.client.denumire }}</span>
+          <span class="font-bold ml-2">{{ procesVerbal.client }}</span>
         </td>
+        <td>{{ procesVerbal.numarProcesVerbal }}</td>
         <td>
           <p-cellEditor>
             <ng-template pTemplate="input">
@@ -99,24 +102,23 @@
         <td>
           <p-cellEditor>
             <ng-template pTemplate="input">
-              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.data" />
+              <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.ora" />
             </ng-template>
             <ng-template pTemplate="output">
-              {{ procesVerbal.data }}
+              {{ procesVerbal.ora }}
             </ng-template>
           </p-cellEditor>
         </td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{ procesVerbal.procedura }}</td>
+        <td>{{ procesVerbal.produs }}</td>
+        <td>{{ procesVerbal.cantitate }}</td>
         <td>
           <p-cellEditor>
             <ng-template pTemplate="input">
               <input pInputText class="p-inputtext p-component p-element" type="text" [(ngModel)]="procesVerbal.operator" />
             </ng-template>
             <ng-template pTemplate="output">
-              {{ procesVerbal.operator.nume }}
-              {{ procesVerbal.operator.prenume }}
+              {{ procesVerbal.operator }}
             </ng-template>
           </p-cellEditor>
         </td>

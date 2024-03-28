@@ -1,6 +1,8 @@
 package com.softdignitas.ddd.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -57,8 +59,9 @@ public class ProcesVerbal implements Serializable {
     @Column(name = "garantie_deratizare")
     private Boolean garantieDeratizare;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "procesVerbal")
-    @JsonIgnoreProperties(value = { "produs", "procesVerbal" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "procesVerbal")
+    @JsonProperty("jTMaterialProcesVerbals")
+    @JsonIgnoreProperties(value = { "procesVerbal" }, allowSetters = true)
     private Set<JTMaterialProcesVerbal> jTMaterialProcesVerbals = new HashSet<>();
 
     @ManyToOne(optional = false)

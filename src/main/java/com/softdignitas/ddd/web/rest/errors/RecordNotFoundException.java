@@ -1,7 +1,5 @@
 package com.softdignitas.ddd.web.rest.errors;
 
-import org.springframework.web.ErrorResponseException;
-
 public class RecordNotFoundException extends BadRequestAlertException {
 
     private static final long serialVersionUID = 1L;

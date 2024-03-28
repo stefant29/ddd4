@@ -4,10 +4,9 @@ import com.softdignitas.ddd.domain.Client;
 import com.softdignitas.ddd.domain.JTMaterialProcesVerbal;
 import com.softdignitas.ddd.domain.Utilizator;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 /**
  * A DTO representing a ProcesVerbalDTO, with only the public attributes.
@@ -27,5 +26,5 @@ public record ProcesVerbalDTO(
     @NotNull(message = "Client may not be null") Client client,
     @NotNull(message = "Operator may not be null") Utilizator operator,
 
-    List<JTMaterialProcesVerbal> jTMaterialProcesVerbals
+    Set<JTMaterialProcesVerbal> jTMaterialProcesVerbals
 ) {}

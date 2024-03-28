@@ -53,21 +53,21 @@ public class DDDEntitateResource<T> {
             .getCompanie();
     }
 
-    private Specification<T> filterByCompanie(Specification<T> specification) {
+    Specification<T> filterByCompanie(Specification<T> specification) {
         final var companie = getCompanie();
 
         return specification.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("companie"), companie));
     }
 
     @GetMapping("")
-    public Page<T> getAll(TableLazyLoadEvent tableLazyLoadEvent) {
+    public Page<?> getAll(TableLazyLoadEvent tableLazyLoadEvent) {
         Map filters = getFilters(tableLazyLoadEvent);
         Specification<T> filtersSpecification = filterByCompanie(getSpecification(filters));
 
         return repository.findAll(filtersSpecification, getPageable(tableLazyLoadEvent));
     }
 
-    private Map getFilters(TableLazyLoadEvent tableLazyLoadEvent) {
+    Map getFilters(TableLazyLoadEvent tableLazyLoadEvent) {
         return Optional
             .ofNullable(tableLazyLoadEvent)
             .map(TableLazyLoadEvent::getFilters)
@@ -82,7 +82,7 @@ public class DDDEntitateResource<T> {
             .orElse(new HashMap());
     }
 
-    private Pageable getPageable(TableLazyLoadEvent tableLazyLoadEvent) {
+    Pageable getPageable(TableLazyLoadEvent tableLazyLoadEvent) {
         int page = 0;
         int size = 10;
 
@@ -101,7 +101,7 @@ public class DDDEntitateResource<T> {
         return PageRequest.of(page, size, sort);
     }
 
-    private Specification<T> getSpecification(Map<String, LinkedHashMap<String, String>> filters) {
+    Specification<T> getSpecification(Map<String, LinkedHashMap<String, String>> filters) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             for (Map.Entry<String, LinkedHashMap<String, String>> entry : filters.entrySet()) {

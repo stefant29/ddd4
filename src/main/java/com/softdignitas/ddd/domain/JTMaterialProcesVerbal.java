@@ -1,5 +1,6 @@
 package com.softdignitas.ddd.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.softdignitas.ddd.domain.enumeration.Procedura;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.UuidGenerator;
  */
 @Entity
 @Table(name = "jt_material_proces_verbal")
+@JsonIgnoreProperties(value = { "procesVerbal" })
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class JTMaterialProcesVerbal implements Serializable {
 
@@ -113,10 +115,17 @@ public class JTMaterialProcesVerbal implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof JTMaterialProcesVerbal)) {
+        if (!(o instanceof JTMaterialProcesVerbal jTMaterialProcesVerbal)) {
             return false;
         }
-        return getId() != null && getId().equals(((JTMaterialProcesVerbal) o).getId());
+
+        return (
+            getId() != null &&
+            getId().equals(jTMaterialProcesVerbal.getId()) &&
+            jTMaterialProcesVerbal.cantitate != null &&
+            jTMaterialProcesVerbal.cantitate.equals(cantitate) &&
+            jTMaterialProcesVerbal.produs.getId().equals(produs.getId())
+        );
     }
 
     @Override

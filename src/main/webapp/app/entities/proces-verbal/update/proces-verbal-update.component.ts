@@ -36,12 +36,15 @@ export class ProcesVerbalUpdateComponent implements OnInit {
   title = 'Creare Proces Verbal';
 
   materialeDeratizari: Array<IMaterial> = [];
+  mapMaterialeDeratizari: Map<string, IMaterial>;
   jtMaterialeDeratizari: Array<IJTMaterialProcesVerbal> = [];
 
   materialeDezinsectii: Array<IMaterial> = [];
+  mapMaterialeDezinsectii: Map<string, IMaterial>;
   jtMaterialeDezinsectii: Array<IJTMaterialProcesVerbal> = [];
 
   materialeDezinfectii: Array<IMaterial> = [];
+  mapMaterialeDezinfectii: Map<string, IMaterial>;
   jtMaterialeDezinfectii: Array<IJTMaterialProcesVerbal> = [];
 
   companiesSharedCollection: ICompanie[] = [];
@@ -67,21 +70,92 @@ export class ProcesVerbalUpdateComponent implements OnInit {
     this.materialService.getIdDenumireList('DERATIZARE').subscribe({
       next: (res: HttpResponse<IMaterial[]>) => {
         this.materialeDeratizari = res.body ?? [];
+
+        this.mapMaterialeDeratizari = new Map(this.materialeDeratizari.map(obj => [obj.id, obj]));
+
+        if (!!this.procesVerbal && !!this.procesVerbal.jTMaterialProcesVerbals) {
+          this.jtMaterialeDeratizari = this.procesVerbal?.jTMaterialProcesVerbals.filter(
+            (item: IJTMaterialProcesVerbal) => item.procedura === 'DERATIZARE',
+          );
+
+          this.jtMaterialeDeratizari.map((item: IJTMaterialProcesVerbal) => {
+            if (item.produs) {
+              item.produs = this.mapMaterialeDeratizari.get(item.produs.id);
+            }
+          });
+        }
       },
     });
     this.materialService.getIdDenumireList('DEZINSECTIE').subscribe({
       next: (res: HttpResponse<IMaterial[]>) => {
         this.materialeDezinsectii = res.body ?? [];
+
+        this.mapMaterialeDezinsectii = new Map(this.materialeDezinsectii.map(obj => [obj.id, obj]));
+
+        if (!!this.procesVerbal && !!this.procesVerbal.jTMaterialProcesVerbals) {
+          this.jtMaterialeDezinsectii = this.procesVerbal?.jTMaterialProcesVerbals.filter(
+            (item: IJTMaterialProcesVerbal) => item.procedura === 'DEZINSECTIE',
+          );
+
+          this.jtMaterialeDezinsectii.map((item: IJTMaterialProcesVerbal) => {
+            if (item.produs) {
+              item.produs = this.mapMaterialeDezinsectii.get(item.produs.id);
+            }
+          });
+        }
       },
     });
     this.materialService.getIdDenumireList('DEZINFECTIE').subscribe({
       next: (res: HttpResponse<IMaterial[]>) => {
         this.materialeDezinfectii = res.body ?? [];
+
+        this.mapMaterialeDezinfectii = new Map(this.materialeDezinfectii.map(obj => [obj.id, obj]));
+
+        if (!!this.procesVerbal && !!this.procesVerbal.jTMaterialProcesVerbals) {
+          this.jtMaterialeDezinfectii = this.procesVerbal?.jTMaterialProcesVerbals.filter(
+            (item: IJTMaterialProcesVerbal) => item.procedura === 'DEZINFECTIE',
+          );
+
+          this.jtMaterialeDezinfectii.map((item: IJTMaterialProcesVerbal) => {
+            if (item.produs) {
+              item.produs = this.mapMaterialeDezinfectii.get(item.produs.id);
+            }
+          });
+        }
       },
     });
 
     this.activatedRoute.data.subscribe(({ procesVerbal }) => {
       this.procesVerbal = procesVerbal;
+      if (!!this.procesVerbal) {
+        this.procesVerbal['jTMaterialProcesVerbals'] = procesVerbal.jtmaterialProcesVerbals;
+        // if (!!this.procesVerbal.jTMaterialProcesVerbals) {
+        //   this.jtMaterialeDezinsectii = this.procesVerbal.jTMaterialProcesVerbals.filter((item: IJTMaterialProcesVerbal) => item.procedura === 'DEZINSECTIE');
+        //   this.jtMaterialeDezinfectii = this.procesVerbal.jTMaterialProcesVerbals.filter((item: IJTMaterialProcesVerbal) => item.procedura === 'DEZINFECTIE');
+        // }
+      }
+
+      // console.log("pv: ", this.procesVerbal);
+      // console.log(this.jtMaterialeDezinsectii);
+
+      // if (!!this.procesVerbal && !!this.procesVerbal.jTMaterialProcesVerbals) {
+      //   this.jtMaterialeDeratizari = this.procesVerbal?.jTMaterialProcesVerbals
+      //     .filter((item: IJTMaterialProcesVerbal) => item.procedura === 'DERATIZARE');
+
+      //     this.jtMaterialeDeratizari.map((item: IJTMaterialProcesVerbal) => {
+      //       if (item.produs) {
+      //         item.produs = this.mapMaterialeDezinsectii.get(item.produs.id)
+      //       }
+      //     })
+      // } else {
+      //   console.log("else2");
+
+      // }
+      // this.jtMaterialeDezinfectii = procesVerbal.jtmaterialProcesVerbals.filter((item: IJTMaterialProcesVerbal) => item.procedura === 'DEZINFECTIE');
+
+      // this.jtMaterialeDezinsectii[0].produs = this.materialeDezinsectii[0];
+      // console.log(this.materialeDezinsectii);
+
       if (procesVerbal) {
         this.title = 'Editare Proces Verbal';
         this.updateForm(procesVerbal);
@@ -97,12 +171,19 @@ export class ProcesVerbalUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
+
     const procesVerbal = this.procesVerbalFormService.getProcesVerbal(this.editForm);
+
     console.log('SAVING');
     console.log(procesVerbal);
 
     if (procesVerbal.id !== null) {
-      this.subscribeToSaveResponse(this.procesVerbalService.update(procesVerbal));
+      this.subscribeToSaveResponse(
+        this.procesVerbalService.update(
+          procesVerbal,
+          this.jtMaterialeDeratizari.concat(this.jtMaterialeDezinfectii).concat(this.jtMaterialeDezinsectii),
+        ),
+      );
     } else {
       this.subscribeToSaveResponse(
         this.procesVerbalService.create(
